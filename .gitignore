@@ -1,0 +1,10 @@
+vim/bundle/
+backup
+swap
+undo
+viminfo
+tmp
+.netrwhist
+__pycache__
+*.pyc
+*~
