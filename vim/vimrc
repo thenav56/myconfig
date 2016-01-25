@@ -14,12 +14,13 @@ Plugin 'CmdlineComplete'
 Plugin 'Chiel92/vim-autoformat'
 Plugin 'vim-airline/vim-airline'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/nerdtree'
+Plugin 'ctrlpvim/ctrlp.vim'
 "Plugin 'klen/python-mode'
-"Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 "Plugin 'Townk/vim-autoclose'
-"Plugin 'bling/vim-airline'
 "Plugin 'bling/vim-bufferline'
-"Plugin 'tpope/vim-fugitive'
 call vundle#end()
 
 " Now we can turn our filetype functionality back on
@@ -71,7 +72,10 @@ set softtabstop=4                                   " number of spaces to insert
 set autoindent                                      " Auto indentation
 set smartindent                                     " Do clever auto indentation
 set nowrap                                          " Don't wrap long lines
+set clipboard+=unnamedplus                          "vim uses system clipboard to copy/paste
 set whichwrap=b,s,h,l,<,>,[,]                       " Backspace and cursor keys wrap too
+set splitbelow                                      "split below
+set splitright
 "set wrapmargin=10                                  " Number of characters from right window border where wrapping starts
 
 au Filetype python call SetPython()
@@ -84,32 +88,24 @@ endfunction
 " UI
 set background=dark                                 " Set dark background
 colorscheme flattened_dark                          " Set colorscheme
-"if has('gui_running')
-    "set guifont=Hack\ 12
-    "set guioptions -=m                              " Remove menubar
-    "set guioptions -=T                              " Remove GUI toolbar
-    "set guioptions -=l                              " Remove left-hand scroll bar
-    "set guioptions -=r                              " Remove right-hand scroll bar
-    "set guioptions -=L                              " Remove left-hand scroll bar
-    "set guioptions -=R                              " Remove left-hand scroll bar
-"else
-    "set t_Co=256                                    " Set terminal color to 256
-    "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-"endif
+if has('gui_running')
+    set guifont=Hack\ 12    "Powerline\ Consolas\ 10
+    set guioptions -=m                              " Remove menubar
+    set guioptions -=T                              " Remove GUI toolbar
+    set guioptions -=l                              " Remove left-hand scroll bar
+    set guioptions -=r                              " Remove right-hand scroll bar
+    set guioptions -=L                              " Remove left-hand scroll bar
+    set guioptions -=R                              " Remove left-hand scroll bar
+else
+    set t_Co=256                                    " Set terminal color to 256
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 set showmatch                                       " When inserting bracket, briefly jump to its match
 set number                                          " Show line number for each line
 set cursorline                                      " Show cursor line
 set fillchars+=vert:\                               " Remove ugly | in split
 set laststatus=2
-"if has('statusline')
-    "set laststatus=2                                    " Always have a status line
-    "set t_Co=256
-    "set statusline=\ %<%f                               " Filename
-    "set statusline+=%w%h%m%r\                           " Options
-    "set statusline+=Â»\ %{&ff}/%Y\                       " Filetype
-    "set statusline+=Â»\ %{getcwd()}\                     " Current directory
-    "set statusline+=%=%l,%c%V\ %p%%                     " Right aligned file navigation info
-"endif
+
 if has('cmdline_info')
     set ruler                                           " Shows current position below each window
     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)  " A ruler on steroids
@@ -128,11 +124,36 @@ set wildignorecase                                  " Ignore case when completin
 
 
 " MAPPINGS
-
+nmap <C-m> :NERDTreeToggle <CR>
 " Map leader to ,
 let mapleader = ','
+" nice navigation in splits
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+\}
 
-" Quickly edit/reload the vimrc file
+" Use the nearest .git directory as the cwd
+" This makes a lot of sense if you are working on a project that is in version
+" control. It also supports works with .svn, .hg, .bzr.
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_open_multiple_files = 'ij'
+" Use a leader instead of the actual named binding
+nmap <leader>p :CtrlP<cr>
+
+" Easy bindings for its various modes
+nmap <leader>bb :CtrlPBuffer<cr>
+nmap <leader>bm :CtrlPMixed<cr>
+nmap <leader>bs :CtrlPMRU<cr>
+nmap <leader>n :bnext<cr>
+nmap <leader>p :bprevious<cr>
+nmap <leader>c :bd<cr>
+"Quickly edit/reload the vimrc file
 nmap <silent> <leader>e :e $MYVIMRC<CR>
 nmap <silent> <leader>r :so $MYVIMRC<CR>
 " Change Working Directory to that of the current file
@@ -153,6 +174,17 @@ let g:indentLine_color_gui = '#08434c'
 let g:indentLine_color_tty_light = 4 " (default: 4)
 let g:indentLine_color_dark = 2 " (default: 2)
 let g:indentLine_char = '┆'
+
+" vim-airline 
+let g:airline_theme = 'powerlineish'
+let g:airline#extensions#tabline#enabled = 1 
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#branch#enabled=1
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
 
 map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)

@@ -208,8 +208,8 @@ bindsym $mod+Ctrl+v exec --no-startup-id /opt/viber/Viber
 
 # ------- Start applications in workspace during startup ----
 
-# workspace 1 - chromium-browser
-exec --no-startup-id i3-msg 'workspace 1:web; exec /usr/bin/chromium-browser'
+# workspace 1 - firefox
+exec --no-startup-id i3-msg 'workspace 1:web; exec /usr/bin/firefox'
 
 # workspace 2 - viber
 exec --no-startup-id i3-msg 'workspace 2:viber; exec /opt/viber/Viber'
@@ -224,7 +224,7 @@ exec --no-startup-id i3-msg 'workspace 9:File_manager; exec nautilus --no-deskto
 
 # -------- move application to workspace --------
 
-assign [class="(?i)chromium-browser"] →  1:web
+assign [class="(?i)firefox"] →  1:web
 assign [class="(?i)viber"] → 2:viber
 assign [class="(?i)nautilus"] →  9:File_manager
 #assign [class="(?i)gnome-terminal"]	→	3:terminal
