@@ -17,6 +17,8 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'klen/python-mode'
+Plugin 'Valloric/YouCompleteMe'
 "Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
 "Plugin 'Townk/vim-autoclose'
@@ -35,7 +37,7 @@ set hidden                                          " Don't unload a buffer when
 set foldenable                                      " Set to display all folds open
 set remap                                           " Recognize mappings in mapped keys
 set nospell                                         " Disable spell correction
-set scroll=11                                       " Number of lines to scroll for Ctrl-U and Ctrl-D
+set scroll=9                                        " Number of lines to scroll for Ctrl-U and Ctrl-D
 set scrolloff=3                                     " Minimal number of screen lines to keep above/below the cursor.
 set scrolljump=5                                    " Lines to scroll when cursor leaves screen
 set mousehide                                       " Hide mouse while typing
@@ -72,7 +74,7 @@ set softtabstop=4                                   " number of spaces to insert
 set autoindent                                      " Auto indentation
 set smartindent                                     " Do clever auto indentation
 set nowrap                                          " Don't wrap long lines
-set clipboard+=unnamedplus                          "vim uses system clipboard to copy/paste
+set clipboard=unnamedplus                          "vim uses system clipboard to copy/paste
 set whichwrap=b,s,h,l,<,>,[,]                       " Backspace and cursor keys wrap too
 set splitbelow                                      "split below
 set splitright
@@ -87,7 +89,7 @@ endfunction
 
 " UI
 set background=dark                                 " Set dark background
-colorscheme flattened_dark                          " Set colorscheme
+colorscheme badwolf                          " Set colorscheme
 if has('gui_running')
     set guifont=Hack\ 12    "Powerline\ Consolas\ 10
     set guioptions -=m                              " Remove menubar
@@ -137,7 +139,7 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
   \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
 \}
-
+let g:ctrlp_max_files=0
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
@@ -189,4 +191,4 @@ let g:airline_symbols.space = "\ua0"
 map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
-
+vnoremap <C-c> "*y

@@ -15,20 +15,20 @@ general {
 #order += "disk /"
 #order += "run_watch DHCP"
 #order += "run_watch VPN"
-order += "wireless wlan0"
-order += "ethernet eth0"
+order += "wireless wlp2s0"
+order += "ethernet enp4s0"
 order += "battery 0"
 #order += "load"
 order += "tztime local"
 order += "volume master"
 
 
-wireless wlan0 {
+wireless wlp2s0 {
         format_up = "W: (%essid)"  #%quality at 
         format_down = "W: down"
 }
 
-ethernet eth0 {
+ethernet enp4s0 {
         # if you use %speed, i3status requires root privileges
         format_up = "E: %ip (%speed)"
         format_down = "E: Nop"

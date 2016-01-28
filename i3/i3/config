@@ -147,9 +147,9 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         #status_command i3status | ~/.config/i3/nepali.py
-        status_command i3status
+        status_command i3blocks
         position top
-        font pango:DejaVu Sans Mono, Ionicons, FontAwesome 10
+        font xft:DejaVu Sans Mono, FontAwesome 10
         colors{
             background #000000
             separator #FF0000
@@ -173,10 +173,10 @@ bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse  sset Master 5
 # toggle mute
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
 # increase brightness 255max
-bindsym XF86MonBrightnessUp exec "echo 100 > /sys/class/backlight/radeon_bl0/brightness"
+bindsym XF86MonBrightnessUp exec  /usr/local/bin/brightnessCon +
 # decrease brightness
-bindsym XF86MonBrightnessDown exec "echo 10 > /sys/class/backlight/radeon_bl0/brightness"
-
+bindsym XF86MonBrightnessDown exec  /usr/local/bin/brightnessCon -
+# decrease brightness
 # previous workspace
 bindsym $mod+Ctrl+h workspace prev
 # next workspace
@@ -204,10 +204,13 @@ bindsym $mod+Ctrl+v exec --no-startup-id /opt/viber/Viber
 
 #bindsym Ctrl+Mod4+l exec xautolock -locknow
 
+#bindsym lock screen
+bindsym $mod+Shift+Ctrl+l exec gnome-screensaver-command -l
 # --------------------------------------------------------------
 
 # ------- Start applications in workspace during startup ----
 
+exec --no-startup-id i3-msg 'exec redshift-gtk'
 # workspace 1 - firefox
 exec --no-startup-id i3-msg 'workspace 1:web; exec /usr/bin/firefox'
 

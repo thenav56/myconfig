@@ -42,17 +42,15 @@ separator_block_width=14
 #interval=30
 
 [wireless]
-label=W:
-instance=wlan0
-#instance=wlp3s0
+label=
+instance=wlp2s0
 command=$HOME/.config/i3blocks/network
 color=#00FF00
-interval=10
+interval=2
 
 [ethernet]
-label=E
-instance=eth0
-#instance=enp0s25
+label=
+instance=enp4s0
 command=$HOME/.config/i3blocks/network
 color=#00FF00
 interval=10
@@ -70,7 +68,7 @@ interval=10
 #interval=10
 
 [battery]
-label=BAT
+#label=BAT
 #label=⚡
 command=$HOME/.config/i3blocks/battery
 interval=30
@@ -80,6 +78,11 @@ interval=30
 command=$HOME/.config/i3blocks/nepali.py
 interval=once
 color=#FFFFFF
+
+#[speed]
+#command=$HOME/.config/i3blocks/speed.sh
+#interval=10
+#color=#00FF00
 
 [time]
 command=date '+%a %Y-%m-%d %H:%M'
@@ -93,3 +96,7 @@ instance=Master
 command=$HOME/.config/i3blocks/volume
 interval=1
 signal=10
+
+#[test]
+#full_text=<span background="red" foreground="white">Salut</span>
+#markup=pango
