@@ -29,6 +29,8 @@ call vundle#end()
 filetype plugin indent on
 syntax on
 
+"set runtimepath -=~/.vim/bundle/YouCompleteMe       "disable plugin without deleting it / temporarily 
+
 " GENERAL
 set nocompatible                                    " Don't behave very Vi compatible
 set encoding=utf-8                                  " Set character encoding

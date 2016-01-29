@@ -33,9 +33,9 @@ ipaddr="$(ip addr show $INTERFACE | perl -n -e'/inet (.+)\// && print $1')"
 ipaddr="${ipaddr:-0.0.0.0}"
 
 # full text
-spd="$(echo `~/.config/i3blocks/speed.sh`)"
-echo -n "$myssid $spd"
-[ -n "$speed" ] && echo " ($speed Mbits/s)" || echo
+#spd="$(echo `~/.config/i3blocks/speed.sh`)"
+#echo -n "$myssid $spd"
+#[ -n "$speed" ] && echo " ($speed Mbits/s)" || echo
 
 # short text
 echo "$ipaddr"

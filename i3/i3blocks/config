@@ -36,13 +36,13 @@ separator_block_width=14
 #command=/usr/share/i3blocks/memory
 #interval=30
 
-#[disk-home]
-#instance=$HOME
-#command=/usr/share/i3blocks/disk
-#interval=30
+[disk]
+label=
+command=$HOME/.config/i3blocks/disk
+interval=30
 
 [wireless]
-label=
+label=
 instance=wlp2s0
 command=$HOME/.config/i3blocks/network
 color=#00FF00
@@ -55,12 +55,12 @@ command=$HOME/.config/i3blocks/network
 color=#00FF00
 interval=10
 
-#[cpu]
-#label=CPU
-#command=/usr/share/i3blocks/cpu_usage
-#interval=10
+[cpu]
+label=
+command=/usr/share/i3blocks/cpu_usage
+interval=10
 #min_width=CPU: 100.00%
-#
+
 #separator=false
 
 #[load]
@@ -73,24 +73,36 @@ interval=10
 command=$HOME/.config/i3blocks/battery
 interval=30
 
-[nepali]
+#[nepali]
 #label=Nepali
-command=$HOME/.config/i3blocks/nepali.py
-interval=once
-color=#FFFFFF
+#command=$HOME/.config/i3blocks/nepali.py
+#interval=once
+#color=#FFFFFF
 
 #[speed]
 #command=$HOME/.config/i3blocks/speed.sh
 #interval=10
 #color=#00FF00
 
+[date]
+command=echo "`date +'%d %b'`"
+interval=1
+label=
+color=#C9CCDB
+
+[separator]
+
 [time]
-command=date '+%a %Y-%m-%d %H:%M'
-interval=60
+command=echo "`date +'%H:%M'`"
+interval=1
+label=
+color=#C9CCDB
+
+[separator]
 
 [volume]
 #label=VOL
-label=♪
+label=
 instance=Master
 #instance=PCM
 command=$HOME/.config/i3blocks/volume
