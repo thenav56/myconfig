@@ -1,0 +1,17 @@
+#!/bin/bash
+
+file="/sys/class/backlight/radeon_bl0/brightness"
+
+value=$(cat "$file")
+
+var1=$1
+if [ $1 == '+' ] || [ $1 == '-' ] ; then
+    var1=-10
+    if [ $1 == '+' ]; then
+        var1=10
+    fi
+    if [ $value -gt 9 ]; then
+        var1=$(($var1 + $value)) 
+    fi
+fi
+    echo $var1 > "$file"
