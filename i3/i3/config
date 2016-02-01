@@ -36,6 +36,7 @@ bindsym $mod+Shift+q kill
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -font "System San Francisco 15"'
+exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -font "System San Francisco 15"'
 #bindsym $mod+d exec rofi -show run
 # change focus
 bindsym $mod+h focus left
@@ -89,23 +90,23 @@ bindsym $mod+a focus parent
 #
 #default applications
 set $wallpaper  "$HOME/Pictures/wallpaper/photo-1423683249427-8ca22bd873e0.jpg"
-set $musicplayer clementine
+set $musicplayer rhythmbox
 set $filemanager thunar
-set $editor      gvim
 set $terminal    gnome-terminal
+set $editor      nvim
 set $browser     firefox
 set $lockscreen  "$HOME/Pictures/lockiron1.png"
 #workspaces
-set $workspace1 "1:  "
+set $workspace1 "1: "
 set $workspace2 "2: "
 set $workspace3 "3: "
 set $workspace4 "4: "
-set $workspace5 "5"
-set $workspace6 "6"
-set $workspace7 "7"
+set $workspace5 "5:  "
+set $workspace6 "6:  "
+set $workspace7 "7:  "
 set $workspace8 "8: "
 set $workspace9 "9: "
-set $workspace10 "10"
+set $workspace10 "10:"
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
 bindsym $mod+2 workspace $workspace2
@@ -237,7 +238,8 @@ bindsym $mod+Ctrl+h workspace prev
 # next workspace
 bindsym $mod+Ctrl+l workspace next
 
-
+#default workspace to open at startup
+exec i3-msg "workspace $workspace2"
 # ScreenEat whole
 bindsym $mod+p exec --no-startup-id /home/navinir/github/ScreenEat/ScreenEat.py
 # ScreenEat Active window
@@ -253,7 +255,8 @@ bindsym $mod+Ctrl+f exec --no-startup-id $filemanager
 
 # viber shortcut
 bindsym $mod+Ctrl+v exec --no-startup-id /opt/viber/Viber
-
+# editor shortcut
+bindsym $mod+Ctrl+e exec --no-startup-id $editor
 #bindsym Ctrl+Mod4+l exec xautolock -locknow
 
 # --------------------------------------------------------------
@@ -272,11 +275,11 @@ exec /opt/viber/Viber
 
 # workspace 3,4 - terminal
 exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
-exec --no-startup-id i3-msg 'workspace $workspace3; exec $editor'
+exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
 # workspace 9 - $filemanager
-exec $filemanager
+#exec $filemanager
 # workspace 8 -music 
-exec $musicplayer
+#exec $musicplayer
 # --------------------------------------------------------------
 
 # -------- move application to workspace --------  use xprop in terminal
@@ -303,3 +306,4 @@ for_window [title="(?i)File Operation Progress"] floating enable
 for_window [title="(?i)Uget"] floating enable
 
 # ---------------------------------------------
+

@@ -12,3 +12,5 @@ __pycache__
 tx
 rx
 
+nvim/bundle/
+tmp
