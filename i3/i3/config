@@ -289,10 +289,11 @@ assign [class="(?i)$filemanager"] →  $workspace9
 #assign [class="(?i)$terminal"]	→	$workspace2
 assign [class="(?i)$editor"]  → $workspace3
 assign [class="(?i)$musicplayer"] →  $workspace8
-
+assign [class="(?i)skype"] → $workspace4
 assign [class="(?i)rhythmbox"] → $workspace8
 assign [class="(?i)smplayer"] →  $workspace8
 assign [class="(?i)viber"] → $workspace4
+assign [class="(?i)chromium-browser"] → $workspace1
 
 # ---------------------------------------------
 
