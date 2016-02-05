@@ -154,7 +154,7 @@ nmap <silent> <leader>r :so $MYVIMRC<CR>
 " Change Working Directory to that of the current file
 cmap cd. cd %:p:h
 " For when you forget to sudo
-cmap w!! w! sudo tee % >/dev/null
+cmap w!! w !sudo tee % >/dev/null
 
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
