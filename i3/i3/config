@@ -89,7 +89,7 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  "$HOME/Pictures/wallpaper/photo-1423683249427-8ca22bd873e0.jpg"
+set $wallpaper  "$HOME/Pictures/wallpaper/PSX_20160204_165457.jpg"
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal
@@ -191,6 +191,8 @@ hide_edge_borders both
 
 #bindsym lock screen
 bindsym $mod+Shift+x exec lock.sh $lockscreen
+#bindsyn lock+suspend 
+bindsym $mod+Shift+s exec lock.sh $lockscreen && systemctl suspend
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
