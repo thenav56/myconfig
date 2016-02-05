@@ -1,22 +1,43 @@
 #!/bin/bash
 
-rx1=$(cat ~/.config/i3blocks/rx)
-tx1=$(cat ~/.config/i3blocks/tx)
+rx1=$(sed '1q;d' ~/.config/i3blocks/rx)
+rx1_time=$(sed '2q;d' ~/.config/i3blocks/rx)
+tx1=$(sed '1q;d' ~/.config/i3blocks/tx)
+
 rx2=$(cat /sys/class/net/wlp2s0/statistics/rx_bytes)
 tx2=$(cat /sys/class/net/wlp2s0/statistics/tx_bytes)
+
 echo "$rx2" > ~/.config/i3blocks/rx
+echo "$(date +%s)" >> ~/.config/i3blocks/rx
 echo "$tx2" > ~/.config/i3blocks/tx
-upsd="($tx2-$tx1)/(5*1024)" #5 is for internal the script is runned
-dnsd="($rx2-$rx1)/(5*1024)"
-umag="KB/s"
-dmag="KB/s"
-if (( $upsd > 900 )) ; then
-tx1=$(cat ~/.config/i3blocks/tx)
-    upsd=$upsd/1024
+
+CTIME=$(date +%s)
+DFFTIME=$(($CTIME-$rx1_time))
+upsd="($tx2-$tx1)/($DFFTIME)" #5 is for internal the script is runned
+dnsd="($rx2-$rx1)/($DFFTIME)"
+
+umag="B/s"
+dmag="B/s"
+
+if (( $upsd > 1000*1024 )) ; then
+    upsd="$upsd/(1024*1024)"
     umag="MB/s"
+elif (( $upsd > 1000 )) ; then
+    upsd=$upsd/1024
+    umag="KB/s"
 fi
-if (( $dnsd > 900 )) ; then
-    dnsd=$dnsd/1024
+if (( $dnsd > 1000*1024 )) ; then
+    dnsd="$dnsd/(1024*1024)"
     dmag="MB/s"
+elif (( $dnsd > 1000 )) ; then
+    dnsd=$dnsd/1024
+    dmag="KB/s"
 fi
-echo "" $( bc <<< "scale = 2; $dnsd" ) "$dmag"  "" $( bc <<< "scale = 2; $upsd" ) "$umag" 
+
+#if (( $upds < 1 ))  && (( $dnsd < 1 )) ; then
+    #if (($umag = "B/s" && $dmag = "B/s")) ; then
+        #exit
+    #fi
+#fi
+
+    echo "" $( bc <<< "scale = 2; $dnsd" ) "$dmag"  "" $( bc <<< "scale = 2; $upsd" ) "$umag" 
