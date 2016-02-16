@@ -32,7 +32,7 @@ set lazyredraw                                      " Don't draw while executing
 set hidden                                          " Don't unload a buffer when no longer show in window
 set foldenable                                      " Set to display all folds open
 set remap                                           " Recognize mappings in mapped keys
-set nospell                                         " Disable spell correction
+"set nospell                                         " Disable spell correction
 set scroll=9                                        " Number of lines to scroll for Ctrl-U and Ctrl-D
 set scrolloff=3                                     " Minimal number of screen lines to keep above/below the cursor.
 set scrolljump=5                                    " Lines to scroll when cursor leaves screen
@@ -78,12 +78,10 @@ au Filetype python call SetPython()
 function! SetPython()
     setlocal textwidth=79                                    " Set maximum width of text that is being inserted
     " Set colorcolumn highlight beyond textwidth
-    execute "setlocal colorcolumn=".join(range(80,80+255-1),",")
+    "execute "setlocal colorcolumn=".join(range(80,80+255-1),",")
 endfunction
 
 " UI
-set background=dark                                 " Set dark background
-colorscheme flattened_dark                          " Set colorscheme
 if has('gui_running')
     set guifont=Hack\ 12    "Powerline\ Consolas\ 10
     set guioptions -=m                              " Remove menubar
@@ -94,7 +92,9 @@ if has('gui_running')
     set guioptions -=R                              " Remove left-hand scroll bar
 else
     set t_Co=256                                    " Set terminal color to 256
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    "set background=dark                                 " Set dark background
+    colorscheme badwolf                          " Set colorscheme
 endif
 set showmatch                                       " When inserting bracket, briefly jump to its match
 set number                                          " Show line number for each line
@@ -181,7 +181,7 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.space = "\ua0"
 
-
+"let g:pymode_python = 'python3'
 let g:pymode_rope_completion = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope_lookup_project = 0

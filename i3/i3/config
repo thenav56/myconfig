@@ -89,7 +89,7 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  "$HOME/Pictures/wallpaper/PSX_20160204_165457.jpg"
+set $wallpaper  "$HOME/Pictures/wallpaper/deadpool/deadpool-shooting-2016-movie-hd-screenshot-1920x1080.jpg"
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal
@@ -269,6 +269,8 @@ bindsym $mod+Ctrl+e exec --no-startup-id $editor
 exec_always  feh --bg-scale $wallpaper
 #start redshift 
 exec redshift-gtk
+# start manbatitalika
+exec ~/github/mainbatti-talika/mainbatti-indicator.py
 # workspace 1 - browser
 exec /usr/bin/$browser
 
