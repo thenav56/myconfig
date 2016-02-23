@@ -16,3 +16,10 @@ modmap ~/.Xmodmap
 
 ```
 
+## ~/.bashrc
+
+```
+#use vi key-binding in terminal
+set -o vi
+
+```
