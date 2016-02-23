@@ -13,8 +13,12 @@ echo "$tx2" > ~/.config/i3blocks/tx
 
 CTIME=$(date +%s)
 DFFTIME=$(($CTIME-$rx1_time))
+if (( $DFFTIME > 0 )) ; then
 upsd="($tx2-$tx1)/($DFFTIME)" #5 is for internal the script is runned
 dnsd="($rx2-$rx1)/($DFFTIME)"
+else
+    exit
+fi
 
 umag="B/s"
 dmag="B/s"
