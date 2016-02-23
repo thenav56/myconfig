@@ -13,4 +13,6 @@ tx
 rx
 
 nvim/bundle/
+nvim/autoload/
 tmp
+*.old
