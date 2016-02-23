@@ -89,7 +89,7 @@ interval=5
 color=#00FF00
 
 [date]
-command=echo "`date +'%d %b'`"
+command=echo "`date +'%g %b %d(%a)'`"
 interval=1
 label=
 color=#C9CCDB
