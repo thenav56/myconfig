@@ -4,6 +4,7 @@ call plug#begin('~/.config/nvim/bundle')
 " This is the Vundle package, which can be found on GitHub.
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
+Plug 'lervag/vimtex'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
@@ -190,3 +191,4 @@ map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
 vnoremap <C-c> "*y
+:tnoremap <Esc> <C-\><C-n>
