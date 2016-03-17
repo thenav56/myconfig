@@ -23,6 +23,7 @@ fi
 umag="B/s"
 dmag="B/s"
 
+if (( $DFFTIME > 0 )) ; then
 if (( $upsd > 1000*1024 )) ; then
     upsd="$upsd/(1024*1024)"
     umag="MB/s"
@@ -36,6 +37,9 @@ if (( $dnsd > 1000*1024 )) ; then
 elif (( $dnsd > 1000 )) ; then
     dnsd=$dnsd/1024
     dmag="KB/s"
+fi
+else
+    exit
 fi
 
 #if (( $upds < 1 ))  && (( $dnsd < 1 )) ; then
