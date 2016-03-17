@@ -1,3 +1,6 @@
+##Install i3 Ubuntu
+sudo apt-get install i3
+
 ##installed fonts 
 >create a folder ~/.fonts and move the *.ttf files there
 
