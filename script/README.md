@@ -12,7 +12,7 @@ Xresources      ~/.Xresources
 
 sudo chown username:users /sys/class/backlight/radeon_bl0/brightness
 xamixer -D pulse sset Master 50%
-modmap ~/.Xmodmap
+xmodmap ~/.Xmodmap
 
 ```
 
