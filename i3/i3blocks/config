@@ -113,6 +113,14 @@ command=$HOME/.config/i3blocks/volume
 interval=1
 signal=10
 
+[Brightness]
+label=
+instance=Master
+#instance=PCM
+command=/usr/local/bin/brightnessCon %
+interval=1
+signal=10
+
 #[test]
 #full_text=<span background="red" foreground="white">Salut</span>
 #markup=pango
