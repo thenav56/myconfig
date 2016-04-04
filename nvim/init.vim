@@ -16,13 +16,15 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'klen/python-mode'
+Plug 'nvie/vim-flake8'
+"Plug 'klen/python-mode'
 Plug 'Valloric/YouCompleteMe'
 Plug 'scrooloose/syntastic'
 call plug#end()
 
 " Now we can turn our filetype functionality back on
 filetype plugin indent on
+let python_highlight_all=1
 syntax on
 
 "set runtimepath -=~/.nvim/bundle/YouCompleteMe       "disable plugin without deleting it / temporarily 
@@ -119,8 +121,21 @@ set wildmode=list:longest                           " Specifies how command line
 set wildignore=*.o,*.obj                            " List of file patterns ignored while expanding wildcards
 set wildignorecase                                  " Ignore case when completing file names
 
+"python with virtualenv support
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+" ignore files in NERDTREE
+let NERDTreeIgnore = ['\.pyc$', '\~$']
+
 " MAPPINGS
-nmap <C-m> :NERDTreeToggle <CR>
+nmap <C-i> :NERDTreeToggle <CR>
 " Map leader to ,
 let mapleader = ','
 " nice navigation in splits
@@ -156,7 +171,10 @@ nmap <silent> <leader>r :so $MYVIMRC<CR>
 cmap cd. cd %:p:h
 " For when you forget to sudo
 cmap w!! w !sudo tee % >/dev/null
-
+" run python from current buffer
+nmap <leader>pr :exec '!python' shellescape(@%, 1)<cr>
+nmap <leader>pr2 :exec '!python2' shellescape(@%, 1)<cr>
+nmap <leader>pr3 :exec '!python3' shellescape(@%, 1)<cr>
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
 " space open/closes folds
@@ -187,6 +205,8 @@ let g:pymode_rope_completion = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope_lookup_project = 0
 
+"use python3 interpreter
+let g:syntastic_python_python_exec = '/path/to/python3'
 map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
