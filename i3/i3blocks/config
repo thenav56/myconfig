@@ -35,15 +35,22 @@ separator_block_width=14
 #instance=swap
 #command=/usr/share/i3blocks/memory
 #interval=30
+[speed]
+command=$HOME/.config/i3blocks/speed.sh
+interval=2
+color=#00FF00
+
 [user]
 label= 
 command=whoami
 interval=10000
+color=#ff66b3
 
 [disk]
 label=
 command=$HOME/.config/i3blocks/disk
 interval=30
+color=#ffff66
 
 [wireless]
 label=
@@ -83,16 +90,12 @@ interval=30
 #interval=once
 #color=#FFFFFF
 
-[speed]
-command=$HOME/.config/i3blocks/speed.sh
-interval=2
-color=#00FF00
 
 [date]
 command=echo "`date +'%g %b %d(%a)'`"
 interval=1
 label=
-color=#C9CCDB
+color=#ffff66
 
 [separator]
 
@@ -100,7 +103,8 @@ color=#C9CCDB
 command=echo "`date +'%l:%M %P'`"
 interval=1
 label=
-color=#C9CCDB
+color=#b3ff66
+
 
 [separator]
 
@@ -112,6 +116,7 @@ instance=Master
 command=$HOME/.config/i3blocks/volume
 interval=1
 signal=10
+color=#ff66b3
 
 [Brightness]
 label=
@@ -120,6 +125,7 @@ instance=Master
 command=/usr/local/bin/brightnessCon %
 interval=1
 signal=10
+color=#ffff66
 
 #[test]
 #full_text=<span background="red" foreground="white">Salut</span>

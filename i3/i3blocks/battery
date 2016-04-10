@@ -85,6 +85,8 @@ if ($status eq 'Discharging') {
 	} elsif($percent < 101){
         print "\#00FF00";
     }
+}else{
+    print "#00FF00\n";
 }
 
 exit(0);
