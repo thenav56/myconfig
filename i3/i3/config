@@ -89,7 +89,7 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  "~/Pictures/wallpaper/wallpaper_51.jpg"
+set $wallpaper  ~/Pictures/col_top.jpg
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal
