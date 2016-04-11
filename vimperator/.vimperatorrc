@@ -1,0 +1,21 @@
+colorscheme solarized_dark
+
+" Show the link destination in the content area
+set ssli=3
+
+" Pass through all keys (like CTRL-Z) on Gmail and Google Reader:
+autocmd LocationChange .* :js modes.passAllKeys = /(mail|docs)\.google\.com|www\.google\.com\/reader\/view/.test(buffer.URL)
+
+command! sourcerc :source ~/.vimperatorrc
+
+"===[ Mappings ]===========================================
+
+" Press 'm' to go to previous tab
+noremap m :tabprevious<CR>
+
+"Press ',' to go to next tab
+noremap , :tabnext<CR>
+
+"Press 'C-a" to select all
+noremap <C-a> <C-v><C-a>
+
