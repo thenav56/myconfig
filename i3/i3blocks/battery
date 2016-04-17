@@ -34,6 +34,30 @@ if ($acpi !~ /: (\w+), (\d+)%/) {
 $status = $1;
 $percent = $2;
 
+my $filename = '.batteryStatus';
+unless(-e $filename) {
+    #Create the file if it doesn't exist
+    open (Fc, ">$filename") or die "cant open file\n";
+    print Fc $status ;
+    close(Fc);
+    print("hello");
+}
+
+open (Status, "+<",$filename) or die "cant open file\n";
+my $prevStatus = <Status>;
+close(Status);
+open (Status, ">",$filename) or die "cant open file\n";
+print Status $status ; 
+close(Status);
+
+if ( $status ne $prevStatus ){
+    if ( $status eq 'Charging'){
+        system("notify-send -i battery Battery \"Plugged\" ");
+    }else{
+        system("notify-send -i battery Battery \"UnPlugged\" ");
+    }
+}
+
 if ($status eq 'Discharging') {
 	
 } elsif ($status eq 'Charging') {
@@ -44,6 +68,9 @@ if ($status eq 'Discharging') {
 
 if ($percent < 5) {
 		$full_text .= '';
+    }elsif ($percent < 15) {
+        system("notify-send -i battery Battery \"Battery Low\" ");
+    }
     }elsif ($percent < 20) {
 		$full_text .= ' ';
 	}elsif ($percent < 40) {
