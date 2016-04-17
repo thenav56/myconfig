@@ -161,8 +161,8 @@ nmap <leader>p :CtrlP<cr>
 nmap <leader>bb :CtrlPBuffer<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>bs :CtrlPMRU<cr>
-nmap <leader>n :bnext<cr>
-nmap <leader>p :bprevious<cr>
+nmap m :bnext<cr>
+nmap <leader>, :bprevious<cr>
 nmap <leader>c :bd<cr>
 "Quickly edit/reload the vimrc file
 nmap <silent> <leader>e :e $MYVIMRC<CR>

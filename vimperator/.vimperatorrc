@@ -6,6 +6,8 @@ set ssli=3
 " Pass through all keys (like CTRL-Z) on Gmail and Google Reader:
 autocmd LocationChange .* :js modes.passAllKeys = /(mail|docs)\.google\.com|www\.google\.com\/reader\/view/.test(buffer.URL)
 
+" ignorekeys add -except=:,/ facebook.\\.com
+
 command! sourcerc :source ~/.vimperatorrc
 
 "===[ Mappings ]===========================================
