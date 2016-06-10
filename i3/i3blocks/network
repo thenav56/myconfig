@@ -34,8 +34,16 @@ speed="$(cat /sys/class/net/$INTERFACE/speed 2> /dev/null)"
 
 # full text
 #spd="$(echo `~/.config/i3blocks/speed.sh`)"
-echo -n "$myssid $spd"
+echo "$myssid $spd"
+echo "\n#00FF00";
 #[ -n "$speed" ] && echo " ($speed Mbits/s)" || echo
+
+#------------------------------------------------------------------------
+
+case $BLOCK_BUTTON in
+  3) amixer -q -D $MIXER sset $SCONTROL $(capability) toggle ;;  # right click, mute/unmute
+esac
+
 
 # short text
 echo "$ipaddr"

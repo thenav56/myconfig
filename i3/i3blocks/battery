@@ -52,9 +52,11 @@ close(Status);
 
 if ( $status ne $prevStatus ){
     if ( $status eq 'Charging'){
-        system("notify-send -i battery Battery \"Plugged\" ");
+        system("notify-send -i battery-caution-charging Battery \"Plugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
+    }elsif( $status eq 'Discharging'){
+        system("notify-send -i battery Battery \"UnPlugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
     }else{
-        system("notify-send -i battery Battery \"UnPlugged\" ");
+        system("notify-send -i battery-full-charged Battery \"Battery Full\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
     }
 }
 
@@ -69,8 +71,9 @@ if ($status eq 'Discharging') {
 if ($percent < 5) {
 		$full_text .= '';
     }elsif ($percent < 15) {
-        system("notify-send -i battery Battery \"Battery Low\" ");
-    }
+        if ( $status eq 'Discharging'){
+        system("notify-send -i battery-low Battery \"Battery Low\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg ");
+        }
     }elsif ($percent < 20) {
 		$full_text .= ' ';
 	}elsif ($percent < 40) {

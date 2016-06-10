@@ -23,7 +23,10 @@ San Francisco Font https://github.com/supermarin/YosemiteSanFranciscoFont
 
 - lxappearance 
    
-   - make font work with gtk `sudo apt-get install lxappearance`
+   - make font work with gtk
+   - `sudo apt-get install lxappearance`
+   - `sudo apt-get install gtk-chtheme`
+   - `sudo apt-get install qt4-qtconfig`
    - open the app lxappearance
    - change the font size , hit apply
    - then open file ~/.gtkrc-2.0 

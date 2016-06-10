@@ -4,10 +4,11 @@ call plug#begin('~/.config/nvim/bundle')
 " This is the Vundle package, which can be found on GitHub.
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
-Plug 'lervag/vimtex'
+"Plug 'lervag/vimtex'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'Yggdroot/indentLine'
 Plug 'CmdlineComplete'
 Plug 'Chiel92/vim-autoformat'
@@ -96,8 +97,8 @@ if has('gui_running')
 else
     set t_Co=256                                    " Set terminal color to 256
     "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    "set background=dark                                 " Set dark background
-    colorscheme badwolf                          " Set colorscheme
+    set background=dark                                 " Set dark background
+    colorscheme PaperColor                               " Set colorscheme
 endif
 set showmatch                                       " When inserting bracket, briefly jump to its match
 set number                                          " Show line number for each line
@@ -158,11 +159,12 @@ let g:ctrlp_open_multiple_files = 'ij'
 nmap <leader>p :CtrlP<cr>
 
 " Easy bindings for its various modes
+nmap <leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 nmap <leader>bb :CtrlPBuffer<cr>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>bs :CtrlPMRU<cr>
-nmap m :bnext<cr>
-nmap <leader>, :bprevious<cr>
+nmap m :bprevious<cr>
+nmap <leader>, :bnext<cr>
 nmap <leader>c :bd<cr>
 "Quickly edit/reload the vimrc file
 nmap <silent> <leader>e :e $MYVIMRC<CR>
@@ -190,7 +192,7 @@ let g:indentLine_color_dark = 2 " (default: 2)
 let g:indentLine_char = '┆'
 
 " vim-airline 
-let g:airline_theme = 'badwolf'
+let g:airline_theme = 'PaperColor'
 let g:airline#extensions#tabline#enabled = 1 
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#branch#enabled=1

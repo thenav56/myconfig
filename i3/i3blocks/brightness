@@ -1,0 +1,13 @@
+#!/bin/bash
+
+brightness=$(brightnessCon %)
+
+
+#------------------------------------------------------------------------
+
+case $BLOCK_BUTTON in
+  4) brightnessCon + ;; # scroll up, increase
+  5) brightnessCon - ;; # scroll down, decrease
+  *) echo "$brightness" ;;
+esac
+

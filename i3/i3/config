@@ -13,7 +13,7 @@ set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
-font pango:System San Francisco Display 10
+font pango:Ubuntu 11
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, if you need a lot of unicode glyphs or
@@ -35,8 +35,9 @@ bindsym $mod+Shift+q kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -font "System San Francisco 15"'
-exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -font "System San Francisco 15"'
+set $bg-color #2f343f
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -lines 10 -eh 2 -width 100 -padding 300 -opacity 85 -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Ubuntu 18"'
+exec_always compton
 #bindsym $mod+d exec rofi -show run
 # change focus
 bindsym $mod+h focus left
@@ -89,19 +90,19 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  ~/Pictures/col_top.jpg
+set $wallpaper  ~/Pictures/heroku-x-python-wallpaper-screen-3840×2160.png
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal
 set $editor      nvim
 set $browser     firefox
-set $lockscreen  "$HOME/Pictures/lockiron1.png"
+set $lockscreen  "$HOME/Pictures/Lock.png"
 #workspaces
 set $workspace1 "1: "
 set $workspace2 "2: "
 set $workspace3 "3: "
 set $workspace4 "4: "
-set $workspace5 "5:  "
+set $workspace5 "5: "
 set $workspace6 "6:  "
 set $workspace7 "7:  "
 set $workspace8 "8: "
@@ -180,6 +181,7 @@ bindsym $mod+r mode "resize"
   set $base0D #97bbf7
   set $base0E #c0b7f9
   set $base0F #fcc09e
+  set $transparent  #00000065
 
 hide_edge_borders both
 # Widow Colours
@@ -200,21 +202,23 @@ bar {
         #status_command i3status | ~/.config/i3/nepali.py
         status_command i3blocks
         position top
-        font xft: FontAwesome , pango 10
+        font xft: FontAwesome , Ubuntu,  pango 11
         colors{
-            
+
              separator $base03
              background $base01
              statusline $base05
-#                               border  background text
-             focused_workspace  $base01 $base01    $base07
+                               #border  background text
+             focused_workspace  $base01 #007fff    $base07
              active_workspace   $base01 $base02    $base03
              inactive_workspace $base01 $base01    $base03
              urgent_workspace   $base01 $base01    $base08
+
         }
 }
 
-
+# Don't change focus with mouse
+focus_follows_mouse no
 
 # exec wicd-gtk -t
 
@@ -271,9 +275,11 @@ exec_always  feh --bg-scale $wallpaper
 #start redshift 
 exec redshift-gtk
 # start manbatitalika
-exec ~/github/mainbatti-talika/mainbatti-indicator.py
+#exec ~/github/mainbatti-talika/mainbatti-indicator.py
 # workspace 1 - browser
 exec /usr/bin/$browser
+# nm-applet for Network Manager
+exec --no-startup-id nm-applet
 
 # workspace 4 - viber
 exec /opt/viber/Viber
@@ -281,11 +287,16 @@ exec /opt/viber/Viber
 # workspace 3,4 - terminal
 exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
 exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
+# workspace 5 - tudu
+#exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e tudu'
 # workspace 9 - $filemanager
 #exec $filemanager
 # workspace 8 -music 
 #exec $musicplayer
 # --------------------------------------------------------------
+# move to workspace 2 aka terminal
+exec --no-startup-id i3-msg 'workspace $workspace2;'
+exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -lines 10 -eh 2 -width 100 -padding 300 -opacity 85 -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Ubuntu 18"'
 
 # -------- move application to workspace --------  use xprop in terminal
 
@@ -299,12 +310,14 @@ assign [class="(?i)rhythmbox"] → $workspace8
 assign [class="(?i)smplayer"] →  $workspace8
 assign [class="(?i)viber"] → $workspace4
 assign [class="(?i)chromium-browser"] → $workspace1
+assign [class="(?i)spotify"] → $workspace8
 
 # ---------------------------------------------
 
 # ------ fixed window mode for certain applicatonis -----
 
 # screeneat window -> floating mode
+for_window [class="(?i)aes.py"] floating enable
 for_window [title="(?i)ScreenEat"] floating enable
 
 # copy progress window -> floating mode

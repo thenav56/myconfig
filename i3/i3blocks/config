@@ -21,42 +21,27 @@
 # urgent
 
 # Global properties
+separator=false
 separator_block_width=14
 
-
-#[memory]
-#label=MEM
-#command=$HOME/.config/i3blocks/memory
-#separator=false
-#interval=30
-
-#[swap]
-#label=SWAP
-#instance=swap
-#command=/usr/share/i3blocks/memory
-#interval=30
 [speed]
 command=$HOME/.config/i3blocks/speed.sh
 interval=2
-color=#00FF00
 
 [user]
 label= 
 command=whoami
 interval=10000
-color=#ff66b3
 
 [disk]
 label=
 command=$HOME/.config/i3blocks/disk
 interval=30
-color=#ffff66
 
 [wireless]
-label=
+label=
 instance=wlp2s0
 command=$HOME/.config/i3blocks/network
-color=#00FF00
 interval=2
 
 [ethernet]
@@ -70,32 +55,15 @@ interval=10
 label=
 command=/usr/share/i3blocks/cpu_usage
 interval=10
-#min_width=CPU: 100.00%
-
-#separator=false
-
-#[load]
-#command=/usr/share/i3blocks/load_average
-#interval=10
 
 [battery]
-#label=BAT
-#label=⚡
 command=$HOME/.config/i3blocks/battery
 interval=30
-
-#[nepali]
-#label=Nepali
-#command=$HOME/.config/i3blocks/nepali.py
-#interval=once
-#color=#FFFFFF
-
 
 [date]
 command=echo "`date +'%g %b %d(%a)'`"
 interval=1
 label=
-color=#ffff66
 
 [separator]
 
@@ -103,30 +71,21 @@ color=#ffff66
 command=echo "`date +'%l:%M %P'`"
 interval=1
 label=
-color=#b3ff66
 
 
 [separator]
 
 [volume]
-#label=VOL
 label=
 instance=Master
-#instance=PCM
 command=$HOME/.config/i3blocks/volume
 interval=1
 signal=10
-color=#ff66b3
 
 [Brightness]
 label=
 instance=Master
-#instance=PCM
-command=/usr/local/bin/brightnessCon %
+command=$HOME/.config/i3blocks/brightness
 interval=1
 signal=10
 color=#ffff66
-
-#[test]
-#full_text=<span background="red" foreground="white">Salut</span>
-#markup=pango
