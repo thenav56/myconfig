@@ -59,6 +59,12 @@ San Francisco Font https://github.com/supermarin/YosemiteSanFranciscoFont
     
     - https://github.com/savoca/dotfiles/blob/dark/.bin/scripts/lock.sh
 
+- File manager
+    
+    - Install Thunar 
+    - `sudo apt-get install thunar`
+    - For Nautilus (To avoid Nautilus Desktop )
+    - `gsettings set org.gnome.desktop.background show-desktop-icons false`
 
 
 refrences :
