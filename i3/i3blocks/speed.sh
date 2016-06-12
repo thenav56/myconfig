@@ -22,30 +22,40 @@ fi
 
 umag="B/s"
 dmag="B/s"
+RED='#FF0000'
+YELLOW='#FFFF00'
+NC='#DFFFFF' # No Color
+colord=$NC
 
 if (( $DFFTIME > 0 )) ; then
 if (( $upsd > 1000*1024 )) ; then
     upsd="$upsd/(1024*1024)"
     umag="MB/s"
+    colord=$RED
 elif (( $upsd > 1000 )) ; then
     upsd=$upsd/1024
     umag="KB/s"
+    colord=$YELLOW
 fi
 if (( $dnsd > 1000*1024 )) ; then
     dnsd="$dnsd/(1024*1024)"
     dmag="MB/s"
+    colord=$RED
 elif (( $dnsd > 1000 )) ; then
     dnsd=$dnsd/1024
     dmag="KB/s"
+    colord=$YELLOW
 fi
 else
     exit
 fi
 
-#if (( $upds < 1 ))  && (( $dnsd < 1 )) ; then
-    #if (($umag = "B/s" && $dmag = "B/s")) ; then
-        #exit
-    #fi
-#fi
+if [ $( bc <<< "scale = 2; $upsd" ) == "0"  ] && [ $( bc <<< "scale = 2; $dnsd" ) == "0"   ]  ; then
+    if [ "$umag" == "B/s" ] && [ "$dmag" == "B/s" ]  ; then
+        exit
+    fi
+fi
 
-    echo "" $( bc <<< "scale = 2; $dnsd" ) "$dmag"  "" $( bc <<< "scale = 2; $upsd" ) "$umag" 
+echo "" $( bc <<< "scale = 2; $dnsd" ) "$dmag"  "" $( bc <<< "scale = 2; $upsd" ) "$umag"
+echo "nope"
+echo "$colord\n";

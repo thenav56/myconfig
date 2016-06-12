@@ -90,7 +90,8 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  ~/Pictures/heroku-x-python-wallpaper-screen-3840×2160.png
+set $wallpaper  ~/Pictures/wallpaper/wallpaper_51.jpg
+
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal

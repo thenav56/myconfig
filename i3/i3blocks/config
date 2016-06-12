@@ -28,6 +28,19 @@ separator_block_width=14
 command=$HOME/.config/i3blocks/speed.sh
 interval=2
 
+[wireless]
+label=
+instance=wlp2s0
+command=$HOME/.config/i3blocks/network
+interval=2
+
+#[ethernet]
+#label=
+#instance=enp4s0
+#command=$HOME/.config/i3blocks/network
+#color=#00FF00
+#interval=10
+
 [user]
 label= 
 command=whoami
@@ -37,19 +50,6 @@ interval=10000
 label=
 command=$HOME/.config/i3blocks/disk
 interval=30
-
-[wireless]
-label=
-instance=wlp2s0
-command=$HOME/.config/i3blocks/network
-interval=2
-
-[ethernet]
-label=
-instance=enp4s0
-command=$HOME/.config/i3blocks/network
-color=#00FF00
-interval=10
 
 [cpu]
 label=
@@ -65,15 +65,10 @@ command=echo "`date +'%g %b %d(%a)'`"
 interval=1
 label=
 
-[separator]
-
 [time]
 command=echo "`date +'%l:%M %P'`"
 interval=1
 label=
-
-
-[separator]
 
 [volume]
 label=
