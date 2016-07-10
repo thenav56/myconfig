@@ -25,7 +25,7 @@ font pango:Ubuntu 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec $terminal 
+bindsym $mod+Return exec $terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -36,7 +36,7 @@ bindsym $mod+Shift+q kill
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 set $bg-color #2f343f
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -lines 10 -eh 2 -width 100 -padding 300 -opacity 85 -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Ubuntu 18"'
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -lines 10 -eh 2 -opacity 75 -fg "$text-color" -font "Ubuntu 18"'
 exec_always compton
 #bindsym $mod+d exec rofi -show run
 # change focus
@@ -90,7 +90,7 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  ~/Pictures/wallpaper/wallpaper_51.jpg
+set $wallpaper  ~/Pictures/Outpost-Imgur.jpg
 
 set $musicplayer rhythmbox
 set $filemanager thunar
@@ -168,6 +168,7 @@ bindsym $mod+r mode "resize"
  
   set $base00 #101218
   set $base01 #1f222d
+  #set $base01 #003B46
   set $base02 #252936
   set $base03 #7780a1
   set $base04 #C0C5CE
@@ -177,7 +178,7 @@ bindsym $mod+r mode "resize"
   set $base08 #ee829f
   set $base09 #f99170
   set $base0A #ffefcc
-  set $base0B #75ff41
+  set $base0B #00FF00
   set $base0C #97e0ff
   set $base0D #97bbf7
   set $base0E #c0b7f9
@@ -261,8 +262,9 @@ bindsym $mod+Ctrl+w exec --no-startup-id /usr/bin/$browser
 # $filemanager shortcut
 bindsym $mod+Ctrl+f exec --no-startup-id $filemanager
 
-# viber shortcut
-bindsym $mod+Ctrl+v exec --no-startup-id /opt/viber/Viber
+# vlc shortcut
+bindsym $mod+Ctrl+v exec --no-startup-id vlc
+
 # editor shortcut
 bindsym $mod+Ctrl+e exec --no-startup-id $editor
 #bindsym Ctrl+Mod4+l exec xautolock -locknow
