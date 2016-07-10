@@ -8,11 +8,9 @@ tmp
 __pycache__
 *.pyc
 *~
-
 tx
 rx
-
-nvim/bundle/
-nvim/autoload/
+nvim/bundle/*
+nvim/autoload/*
 tmp
 *.old

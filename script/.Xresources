@@ -20,10 +20,10 @@ rofi.bg:                             #FDF6E3
 ! ROFI Color theme
 ! ------------------------------------------------------------------------------
 rofi.color-enabled: true
-rofi.color-window: #273238, #273238, #1e2529
-rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
-rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
-rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
+rofi.color-window: #003B46, #003B46, #1e2529
+rofi.color-normal: #003B46, #c1c1c1, #003B46, #394249, #ffffff
+rofi.color-active: #003B46, #80cbc4, #003B46, #394249, #80cbc4
+rofi.color-urgent: #003B46, #ff1844, #003B46, #394249, #ff1844
 !
 !
 
@@ -145,6 +145,9 @@ URxvt.letterSpace:         -1
 
 URxvt.internalBorder:      0
 URxvt.externalBorder:      0
+
+URxvt.transparent:   true
+URxvt.shading:       30
 
 URxvt.scrollBar:           false
 

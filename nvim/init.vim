@@ -6,6 +6,7 @@ call plug#begin('~/.config/nvim/bundle')
 " 'user/repository' format
 "Plug 'lervag/vimtex'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'mhinz/vim-startify'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
 Plug 'NLKNguyen/papercolor-theme'
@@ -99,6 +100,7 @@ else
     "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     set background=dark                                 " Set dark background
     colorscheme PaperColor                               " Set colorscheme
+    hi Normal ctermbg=none
 endif
 set showmatch                                       " When inserting bracket, briefly jump to its match
 set number                                          " Show line number for each line
