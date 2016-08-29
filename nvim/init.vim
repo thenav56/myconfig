@@ -18,7 +18,8 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'nvie/vim-flake8'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"Plug 'nvie/vim-flake8'
 "Plug 'klen/python-mode'
 Plug 'Valloric/YouCompleteMe'
 Plug 'scrooloose/syntastic'
@@ -100,7 +101,7 @@ else
     "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     set background=dark                                 " Set dark background
     colorscheme PaperColor                               " Set colorscheme
-    hi Normal ctermbg=none
+    hi Normal ctermbg=none                             " enables transparent
 endif
 set showmatch                                       " When inserting bracket, briefly jump to its match
 set number                                          " Show line number for each line
@@ -147,23 +148,26 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " Setup some default ignores
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
-\}
-let g:ctrlp_max_files=0
+"let g:ctrlp_custom_ignore = {
+  "\ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  "\ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+"\}
+"let g:ctrlp_max_files=0
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
-let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_open_multiple_files = 'ij'
+"let g:ctrlp_working_path_mode = 'r'
+"let g:ctrlp_open_multiple_files = 'ij'
 " Use a leader instead of the actual named binding
-nmap <leader>p :CtrlP<cr>
+"nmap <leader>p :CtrlP<cr>
+" FZF alternative for ctrlP
+nmap <leader>bf :FZF! -m<cr>
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 " Easy bindings for its various modes
-nmap <leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
-nmap <leader>bb :CtrlPBuffer<cr>
-nmap <leader>bm :CtrlPMixed<cr>
+"nmap <leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+"nmap <leader>bb :CtrlPBuffer<cr>
+"nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>bs :CtrlPMRU<cr>
 nmap m :bprevious<cr>
 nmap <leader>, :bnext<cr>
@@ -176,9 +180,9 @@ cmap cd. cd %:p:h
 " For when you forget to sudo
 cmap w!! w !sudo tee % >/dev/null
 " run python from current buffer
-nmap <leader>pr :exec '!python' shellescape(@%, 1)<cr>
-nmap <leader>pr2 :exec '!python2' shellescape(@%, 1)<cr>
-nmap <leader>pr3 :exec '!python3' shellescape(@%, 1)<cr>
+"nmap <leader>pr :exec '!python' shellescape(@%, 1)<cr>
+"nmap <leader>pr2 :exec '!python2' shellescape(@%, 1)<cr>
+"nmap <leader>pr3 :exec '!python3' shellescape(@%, 1)<cr>
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
 " space open/closes folds
@@ -209,10 +213,15 @@ let g:pymode_rope_completion = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope_lookup_project = 0
 
-"use python3 interpreter
-let g:syntastic_python_python_exec = '/path/to/python3'
+" syantastic config
+let g:syntastic_python_python_exec = "/usr/bin/python3"
+"let g:syntastic_python_flake8_exec = "/usr/bin/python3"
+
 map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
 vnoremap <C-c> "*y
-:tnoremap <Esc> <C-\><C-n>
+
+
+" Exit in Terminal mode
+:tnoremap <C-l> <C-\><C-n>

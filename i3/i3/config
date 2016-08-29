@@ -90,7 +90,8 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 #
 #default applications
-set $wallpaper  ~/Pictures/Outpost-Imgur.jpg
+set $wallpaper  ~/Pictures/heroku-x-python-wallpaper-screen-3840×2160.png 
+
 
 set $musicplayer rhythmbox
 set $filemanager thunar
