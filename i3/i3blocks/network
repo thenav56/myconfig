@@ -35,7 +35,7 @@ speed="$(cat /sys/class/net/$INTERFACE/speed 2> /dev/null)"
 # full text
 #spd="$(echo `~/.config/i3blocks/speed.sh`)"
 echo "$myssid $spd"
-echo "\n#00FF00";
+echo "\n#12ed6a";
 #[ -n "$speed" ] && echo " ($speed Mbits/s)" || echo
 
 #------------------------------------------------------------------------

@@ -116,7 +116,7 @@ if ($status eq 'Discharging') {
         print "\#00FF00";
     }
 }else{
-    print "#00FF00\n";
+    print "#12ed6a\n";
 }
 
 exit(0);

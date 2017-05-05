@@ -57,5 +57,5 @@ if [ $( bc <<< "scale = 2; $upsd" ) == "0"  ] && [ $( bc <<< "scale = 2; $dnsd" 
 fi
 
 echo "" $( bc <<< "scale = 2; $dnsd" ) "$dmag"  "" $( bc <<< "scale = 2; $upsd" ) "$umag"
-echo "nope"
+echo ""
 echo "$colord\n";

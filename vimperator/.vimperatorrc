@@ -1,4 +1,4 @@
-colorscheme solarized_dark
+colorscheme indigo-fx3
 
 " Show the link destination in the content area
 set ssli=3

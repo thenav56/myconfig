@@ -19,10 +19,13 @@ Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'jelera/vim-javascript-syntax'
+Plug 'sheerun/vim-polyglot'
 "Plug 'nvie/vim-flake8'
 "Plug 'klen/python-mode'
 Plug 'Valloric/YouCompleteMe'
 Plug 'scrooloose/syntastic'
+Plug 'flazz/vim-colorschemes'
 call plug#end()
 
 " Now we can turn our filetype functionality back on
@@ -40,8 +43,8 @@ set foldenable                                      " Set to display all folds o
 set remap                                           " Recognize mappings in mapped keys
 "set nospell                                         " Disable spell correction
 set scroll=9                                        " Number of lines to scroll for Ctrl-U and Ctrl-D
-set scrolloff=3                                     " Minimal number of screen lines to keep above/below the cursor.
-set scrolljump=5                                    " Lines to scroll when cursor leaves screen
+"set scrolloff=3                                     " Minimal number of screen lines to keep above/below the cursor.
+"set scrolljump=5                                    " Lines to scroll when cursor leaves screen
 set mousehide                                       " Hide mouse while typing
 set mouse=a                                         " Enable mouse for all modes
 set incsearch                                       " Show match for partly typed search command
@@ -100,7 +103,7 @@ else
     set t_Co=256                                    " Set terminal color to 256
     "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     set background=dark                                 " Set dark background
-    colorscheme PaperColor                               " Set colorscheme
+    colorscheme PaperColor                              " Set colorscheme
     hi Normal ctermbg=none                             " enables transparent
 endif
 set showmatch                                       " When inserting bracket, briefly jump to its match
@@ -165,7 +168,8 @@ nmap <leader>bf :FZF! -m<cr>
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 " Easy bindings for its various modes
-"nmap <leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+nmap <leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+
 "nmap <leader>bb :CtrlPBuffer<cr>
 "nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>bs :CtrlPMRU<cr>
