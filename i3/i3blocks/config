@@ -26,6 +26,8 @@ separator_block_width=14
 
 [speed]
 command=$HOME/.config/i3blocks/speed.sh
+#command=/usr/share/i3blocks/bandwidth
+markup=pango
 interval=2
 
 [wireless]
@@ -47,28 +49,34 @@ command=whoami
 interval=10000
 
 [disk]
-label=
+label=
 command=$HOME/.config/i3blocks/disk
 interval=30
 
 [cpu]
-label=
+label=
 command=/usr/share/i3blocks/cpu_usage
 interval=10
 
-[cpu_temp]
-label=
-command=/usr/share/i3blocks/temperature
+[memory]
+label=
+command=echo $(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
 interval=10
+
+[cpu_temp]
+label=
+command=/usr/share/i3blocks/temperature
+#command=echo $(acpi -t | awk '{print $4"°C"}')
+interval=5
 
 [battery]
 command=$HOME/.config/i3blocks/battery
-#command= echo "20% \n \#00FF00";
-interval=30
+#command=/usr/share/i3blocks/battery
+interval=1
 #label= 
 
 [date]
-command=echo "`date +'%g %b %d(%a)'`"
+command=echo "`date +'%G %m %d (%b %a)'`"
 interval=1
 label=
 
@@ -90,4 +98,4 @@ instance=Master
 command=$HOME/.config/i3blocks/brightness
 interval=1
 signal=10
-color=#ffff66
+#color=#ffff66

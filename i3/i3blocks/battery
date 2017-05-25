@@ -34,29 +34,29 @@ if ($acpi !~ /: (\w+), (\d+)%/) {
 $status = $1;
 $percent = $2;
 
-my $filename = '.batteryStatus';
+my $filename = '/tmp/.batteryStatus';
 unless(-e $filename) {
     #Create the file if it doesn't exist
     open (Fc, ">$filename") or die "cant open file\n";
     print Fc $status ;
     close(Fc);
-    print("hello");
+    print(" ");
 }
 
 open (Status, "+<",$filename) or die "cant open file\n";
 my $prevStatus = <Status>;
 close(Status);
 open (Status, ">",$filename) or die "cant open file\n";
-print Status $status ; 
+print Status $status ;
 close(Status);
 
 if ( $status ne $prevStatus ){
     if ( $status eq 'Charging'){
-        system("notify-send -i battery-caution-charging Battery \"Plugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
+        system("notify-send -i battery-good-charging Battery \"Plugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
     }elsif( $status eq 'Discharging'){
-        system("notify-send -i battery Battery \"UnPlugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
+        system("notify-send -i battery-medium Battery \"UnPlugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
     }else{
-        system("notify-send -i battery-full-charged Battery \"Battery Full\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
+        system("notify-send -i battery-full-charging Battery \"Battery Full\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
     }
 }
 
@@ -68,23 +68,38 @@ if ($status eq 'Discharging') {
 	$full_text .= ' ';
 }
 
-if ($percent < 5) {
-		$full_text .= '';
-    }elsif ($percent < 15) {
-        if ( $status eq 'Discharging'){
-        system("notify-send -i battery-low Battery \"Battery Low\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg ");
+if ($percent < 20) {
+    if ($percent < 20){$full_text .= ' ';}
+    if ($percent < 10){$full_text .= ' ';}
+    if ( $status eq 'Discharging' && $percent < 15){
+        my $diffTime = 5*60;
+        my $filenameTime = '/tmp/.batteryTime';
+        my $time = `date +%s`;
+        unless(-e $filenameTime) {
+            #Create the file if it doesn't exist
+            open (Fc, ">$filenameTime") or die "cant open file\n";
+            print Fc $time ;
+            close(Fc);
         }
-    }elsif ($percent < 20) {
-		$full_text .= ' ';
-	}elsif ($percent < 40) {
-		$full_text .= ' ';
-    }elsif ($percent < 60) {
-		$full_text .= ' ';
-	}elsif ($percent < 90) {
-		$full_text .= " ";
-    }else{ 
-        $full_text .= ' ';
+        open (Time, "+<",$filenameTime) or die "cant open file\n";
+        my $prevTime = <Time>;
+        close(Status);
+        if ($time - $prevTime > $diffTime) {
+            system("notify-send -u critical -i battery-caution Battery \"Battery Low\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg ");
+            open (Time, ">",$filenameTime) or die "cant open file\n";
+            print Time $time ;
+            close(Time);
+        }
     }
+}elsif ($percent < 40) {
+    $full_text .= ' ';
+}elsif ($percent < 60) {
+    $full_text .= ' ';
+}elsif ($percent < 90) {
+    $full_text .= " ";
+}else{ 
+    $full_text .= ' ';
+}
 
 if ($percent < 100) { 
 $full_text .= "$percent%";
@@ -103,20 +118,20 @@ print "$short_text\n";
 # consider color and urgent flag only on discharge
 if ($status eq 'Discharging') {
     if($percent < 15) {
-        print "#FF0000\n";
+        print "#c54040\n";
     }elsif ($percent < 20) {
-		print "#FF4400\n";
+		print "#f59696\n";
 	} elsif ($percent < 40) {
-		print "#FFAE00\n";
+		print "#c59696\n";
 	} elsif ($percent < 60) {
-		print "#FFF600\n";
+		print "#959696\n";
 	} elsif ($percent < 85) {
-		print "#A8FF00\n";
+		print "#659696\n";
 	} elsif($percent < 101){
-        print "\#00FF00";
+        print "#359696\n";
     }
 }else{
-    print "#12ed6a\n";
+    print "#32d8b3\n";
 }
 
 exit(0);

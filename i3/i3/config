@@ -89,17 +89,23 @@ bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
-#
-#default applications
-set $wallpaper  ~/Pictures/t3_68mlnt.png
 
+# toggle wifi (xps 15 wifi adapter sleeps to much)
+#bindsym $mod+t exec rfkill block wifi && rfkill unblock wifi
+#bindsym $mod+t exec nmcli connection up toggle
+bindsym $mod+t exec nmcli device disconnect wlp2s0 && nmcli device connect wlp2s0
+
+bindsym $mod+c exec /home/navin/git/myconfig/script/toggleCompton.sh
+
+#default applications
+set $wallpaper  ~/Pictures/TyDgYyR.jpg
 
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal
-set $editor      nvim
+set $editor      vim
 set $browser     firefox
-set $lockscreen  "$HOME/Pictures/Lock.png"
+set $lockscreen  "$HOME/Pictures/lock-flat.png"
 #workspaces
 set $workspace1 "1: "
 set $workspace2 "2: "
@@ -169,7 +175,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
  
   set $base00 #101218
-  set $base01 #1f222d
+  set $base01 #011c21
   #set $base01 #003B46
   set $base02 #252936
   set $base03 #7780a1
@@ -180,7 +186,7 @@ bindsym $mod+r mode "resize"
   set $base08 #ee829f
   set $base09 #f99170
   set $base0A #ffefcc
-  set $base0B #12ed6a
+  set $base0B #91E5A9
   set $base0C #97e0ff
   set $base0D #97bbf7
   set $base0E #c0b7f9
@@ -196,7 +202,7 @@ hide_edge_borders both
   client.urgent           $base02 $base08    $base00 $base0F
 
 #bindsym lock screen
-bindsym $mod+Shift+x exec lock.sh $lockscreen
+bindsym $mod+Shift+x exec /home/navin/git/myconfig/script/lock.sh $lockscreen
 #bindsyn lock+suspend 
 #bindsym $mod+Shift+s exec lock.sh $lockscreen && systemctl suspend
 bindsym $mod+Shift+s exec gnome-screensaver-command -l && systemctl suspend
@@ -225,10 +231,17 @@ focus_follows_mouse no
 # exec wicd-gtk -t
 
 exec amixer -D pulse sset Master 5%
-#touchpad natural scrolling 
-exec --no-startup-id xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Scrolling Distance" -115, -115
+
+#touchpad natural scrolling
+exec --no-startup-id xinput set-prop "DLL07BE:01 06CB:7A13 Touchpad" "Synaptics Scrolling Distance" -30, -30
+exec --no-startup-id xinput set-prop 'DLL07BE:01 06CB:7A13 Touchpad' 'Synaptics Two-Finger Scrolling' 1, 1
+exec --no-startup-id syndaemon -i 1.0 -K -t -d
 
 # ------------------ my keybindings -------------------
+
+# use xev to find key number
+# use xmodmap -pke to find name
+
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
 # Show the next scratchpad window or hide the focused scratchpad window.
@@ -256,11 +269,11 @@ bindsym $mod+Ctrl+l workspace next
 #default workspace to open at startup
 exec i3-msg "workspace $workspace2"
 # ScreenEat whole
-bindsym $mod+p exec --no-startup-id /home/navinir/github/ScreenEat/screeneat.py
+bindsym $mod+p exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py
 # ScreenEat Active window
-bindsym $mod+o exec --no-startup-id /home/navinir/github/ScreenEat/screeneat.py --active
+bindsym $mod+o exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py --active
 # ScreenEat cropped
-bindsym $mod+i exec --no-startup-id /home/navinir/github/ScreenEat/screeneat.py --cropped
+bindsym $mod+i exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py --cropped
 
 # $browser shortcut
 bindsym $mod+Ctrl+w exec --no-startup-id /usr/bin/$browser
@@ -279,30 +292,27 @@ bindsym $mod+Ctrl+e exec --no-startup-id $editor
 
 # ------- Start applications in workspace during startup ----
 
-exec_always compton -i .8 --config ~/github/myconfig/compton/config
-
-#set wallpaper 
+exec_always /home/navin/git/myconfig/script/toggleCompton.sh
+#set wallpaper
 exec_always  feh --bg-scale $wallpaper
-#start redshift 
+#start redshift
 exec redshift-gtk
 # start manbatitalika
-#exec ~/github/mainbatti-talika/mainbatti-indicator.py
+#exec ~/git/mainbatti-talika/mainbatti-indicator.py
 # workspace 1 - browser
 exec /usr/bin/$browser
+exec /usr/bin/google-chrome
 
 # Sound
-exec --no-startup-id pasystray
+exec --no-startup-id pasystray --volume-max=150
 
 # nm-applet for Network Manager
 exec --no-startup-id nm-applet
 exec --no-startup-id gnome-settings-daemon
 
-# android notification server
-exec ~/.linconnect/LinConnectServer/update.sh
-
 # workspace 4 - viber
 #exec /opt/viber/Viber
-exec /opt/wmail-desktop/WMail
+#exec /usr/bin/skypeforlinux
 
 # workspace 3,4 - terminal
 exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
@@ -310,7 +320,8 @@ exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
 # workspace 5 - tudu
 #exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e tudu'
 # workspace 9 - $filemanager
-#exec $filemanager
+exec --no-startup-id i3-msg 'workspace $workspace9; exec $filemanager'
+
 # workspace 8 -music 
 #exec $musicplayer
 # --------------------------------------------------------------
@@ -320,7 +331,7 @@ exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -lines 10 
 
 # -------- move application to workspace --------  use xprop in terminal
 
-assign [class="(?i)chromium-browser"] → $workspace1
+assign [class="(?i)google-chrome"] → $workspace1
 assign [class="(?i)$browser"] →  $workspace1
 
 #assign [class="(?i)$terminal"]	→	$workspace2

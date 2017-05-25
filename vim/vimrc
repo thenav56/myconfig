@@ -1,29 +1,24 @@
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" set rtp+=~/.vim/bundle/Vundle.vim
+call plug#begin('~/.vim/plugged')
 
 " This is the Vundle package, which can be found on GitHub.
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'Yggdroot/indentLine'
-Plugin 'CmdlineComplete'
-Plugin 'Chiel92/vim-autoformat'
-Plugin 'vim-airline/vim-airline'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/nerdtree'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'klen/python-mode'
-Plugin 'Valloric/YouCompleteMe'
-"Plugin 'klen/python-mode'
-Plugin 'scrooloose/syntastic'
-"Plugin 'Townk/vim-autoclose'
-"Plugin 'bling/vim-bufferline'
-call vundle#end()
+Plug  'mhinz/vim-startify'
+Plug  'Yggdroot/indentLine'
+Plug  'Chiel92/vim-autoformat'
+Plug  'vim-airline/vim-airline'
+Plug  'vim-airline/vim-airline-themes'
+Plug  'scrooloose/nerdcommenter'
+Plug  'tpope/vim-fugitive' " git
+Plug  'scrooloose/nerdtree'
+Plug  'ctrlpvim/ctrlp.vim'
+Plug  'klen/python-mode'
+Plug  'Valloric/YouCompleteMe'
+Plug  'scrooloose/syntastic'
+call plug#end()
 
 " Now we can turn our filetype functionality back on
 filetype plugin indent on
@@ -81,6 +76,12 @@ set whichwrap=b,s,h,l,<,>,[,]                       " Backspace and cursor keys 
 set splitbelow                                      "split below
 set splitright
 "set wrapmargin=10                                  " Number of characters from right window border where wrapping starts
+"
+set termguicolors
+let colorSchemeL="seoul256-light"
+let colorSchemeD="Tomorrow-Night-Eightnies"
+let colorAirlineL="papercolor"
+let colorAirlineD="onedark"
 
 au Filetype python call SetPython()
 function! SetPython()
@@ -89,9 +90,28 @@ function! SetPython()
     execute "setlocal colorcolumn=".join(range(80,80+255-1),",")
 endfunction
 
+function! ToggleTheme()
+  let cColors = g:colors_name
+  let background = (cColors == g:colorSchemeL)? "dark" : "light"
+  let g:airline_theme = (cColors == g:colorSchemeL)? g:colorAirlineD : g:colorAirlineL
+  exec "set background =". background
+  let tColors = (cColors == g:colorSchemeL)? g:colorSchemeD:g:colorSchemeL
+  exec "color ". tColors
+  redraw
+endfunction
+
 " UI
-set background=dark                                 " Set dark background
-colorscheme badwolf                          " Set colorscheme
+let hour = strftime("%H")
+if 6 <= hour && hour < 18
+  set background=light
+  let g:airline_theme = g:colorAirlineL
+  exec "color ". colorSchemeL
+else
+  set background=dark
+  let g:airline_theme = g:colorAirlineD
+  exec "color ". colorSchemeD
+endif
+
 if has('gui_running')
     set guifont=Hack\ 12    "Powerline\ Consolas\ 10
     set guioptions -=m                              " Remove menubar
@@ -127,10 +147,12 @@ set wildignore=*.o,*.obj                            " List of file patterns igno
 set wildignorecase                                  " Ignore case when completing file names
 
 
-" MAPPINGS
-nmap <C-m> :NERDTreeToggle <CR>
 " Map leader to ,
 let mapleader = ','
+
+" MAPPINGS
+map <leader>s :source ~/.vim/vimrc<CR>
+nnoremap <tab> :NERDTreeToggle <CR>
 " nice navigation in splits
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -146,12 +168,18 @@ let g:ctrlp_max_files=0
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
 let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_open_multiple_files = 'ij'
+let g:ctrlp_open_multiple_files = 'ij' "avoid opening into split window on <c-o>
 " Use a leader instead of the actual named binding
 nmap <leader>p :CtrlP<cr>
+nmap ; :CtrlPBuffer<CR>
+
+" Easy buffer navigation
+nnoremap m :bprev<CR>
+nnoremap ,, :bnext<CR>
+nmap <C-c> :bd<CR>
 
 " Easy bindings for its various modes
-nmap <leader>bb :CtrlPBuffer<cr>
+nmap <leader>bb :CtrlPBuffer<CR>
 nmap <leader>bm :CtrlPMixed<cr>
 nmap <leader>bs :CtrlPMRU<cr>
 nmap <leader>n :bnext<cr>
@@ -163,12 +191,15 @@ nmap <silent> <leader>r :so $MYVIMRC<CR>
 " Change Working Directory to that of the current file
 cmap cd. cd %:p:h
 " For when you forget to sudo
-cmap w!! w! sudo tee % >/dev/null
+cmap w!! w !sudo tee %
 
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
 " space open/closes folds
 nnoremap <space> za
+
+" Easy bindings for its various modes
+nmap <leader>bg :call ToggleTheme()<CR>
 
 " Vim
 let g:indentLine_color_term = 239
@@ -180,9 +211,9 @@ let g:indentLine_color_dark = 2 " (default: 2)
 let g:indentLine_char = '┆'
 
 " vim-airline 
-let g:airline_theme = 'powerlineish'
 let g:airline#extensions#tabline#enabled = 1 
 let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#branch#enabled=1
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
@@ -191,12 +222,14 @@ endif
 let g:airline_symbols.space = "\ua0"
 
 "pymode to use python3
-"let g:pymode_python = 'python3'
+let g:pymode_python = 'python3'
 let g:pymode_rope_completion = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope_lookup_project = 0
 
+let g:syntastic_python_checkers = ['pyflakes']
+
 map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
-vnoremap <C-c> "*y
+"vnoremap <C-c> "*y

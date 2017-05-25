@@ -1,7 +1,7 @@
 #!/bin/bash
 
-maxfile="/sys/class/backlight/radeon_bl0/max_brightness"
-file="/sys/class/backlight/radeon_bl0/brightness"
+maxfile="/sys/class/backlight/intel_backlight/max_brightness"
+file="/sys/class/backlight/intel_backlight/brightness"
 
 maxvalue=$(cat "$maxfile")
 value=$(cat "$file")
@@ -20,9 +20,9 @@ fi
 
 var1=$1
 if [ $1 == '+' ] || [ $1 == '-' ] ; then
-    var1=-10
+    var1=-50
     if [ $1 == '+' ]; then
-        var1=10
+        var1=50
     fi
     if [ $value -gt 9 ]; then
         var1=$(($var1 + $value)) 
