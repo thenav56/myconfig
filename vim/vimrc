@@ -6,18 +6,22 @@ call plug#begin('~/.vim/plugged')
 " This is the Vundle package, which can be found on GitHub.
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
+"Plug  'itchyny/lightline.vim'
 Plug  'mhinz/vim-startify'
-Plug  'Yggdroot/indentLine'
+"Plug  'Yggdroot/indentLine'
 Plug  'Chiel92/vim-autoformat'
-Plug  'vim-airline/vim-airline'
 Plug  'vim-airline/vim-airline-themes'
 Plug  'scrooloose/nerdcommenter'
-Plug  'tpope/vim-fugitive' " git
+Plug  'nathanaelkane/vim-indent-guides'
+Plug  'tpope/vim-fugitive'
 Plug  'scrooloose/nerdtree'
 Plug  'ctrlpvim/ctrlp.vim'
-Plug  'klen/python-mode'
+Plug  'nvie/vim-flake8'
 Plug  'Valloric/YouCompleteMe'
-Plug  'scrooloose/syntastic'
+Plug  'w0rp/ale'
+Plug  'Konfekt/FastFold'
+"Plug  'scrooloose/syntastic'
+Plug  'vim-airline/vim-airline'
 call plug#end()
 
 " Now we can turn our filetype functionality back on
@@ -77,11 +81,12 @@ set splitbelow                                      "split below
 set splitright
 "set wrapmargin=10                                  " Number of characters from right window border where wrapping starts
 "
+
 set termguicolors
 let colorSchemeL="seoul256-light"
-let colorSchemeD="Tomorrow-Night-Eightnies"
+let colorSchemeD="neodark"
 let colorAirlineL="papercolor"
-let colorAirlineD="onedark"
+let colorAirlineD="luna"
 
 au Filetype python call SetPython()
 function! SetPython()
@@ -113,7 +118,7 @@ else
 endif
 
 if has('gui_running')
-    set guifont=Hack\ 12    "Powerline\ Consolas\ 10
+    set guifont=Hack\ 10.5    "Powerline\ Consolas\ 10
     set guioptions -=m                              " Remove menubar
     set guioptions -=T                              " Remove GUI toolbar
     set guioptions -=l                              " Remove left-hand scroll bar
@@ -161,7 +166,7 @@ nnoremap <C-H> <C-W><C-H>
 " Setup some default ignores
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|pyc)$',
 \}
 let g:ctrlp_max_files=0
 " Use the nearest .git directory as the cwd
@@ -210,8 +215,10 @@ let g:indentLine_color_tty_light = 4 " (default: 4)
 let g:indentLine_color_dark = 2 " (default: 2)
 let g:indentLine_char = '┆'
 
-" vim-airline 
-let g:airline#extensions#tabline#enabled = 1 
+" vim-airline
+let g:airline_extensions = ['branch', 'tabline']
+let g:airline#extensions#tagbar#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#branch#enabled=1
@@ -220,16 +227,59 @@ if !exists('g:airline_symbols')
       let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tabline#right_alt_sep = ''
 
 "pymode to use python3
-let g:pymode_python = 'python3'
-let g:pymode_rope_completion = 0
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_rope_lookup_project = 0
+"let g:pymode_python = 'python3'
+"let g:pymode_rope=0
+"let g:pymode_rope_completion = 0
+"let g:pymode_rope_complete_on_dot = 0
+"let g:pymode_rope_lookup_project = 0
 
-let g:syntastic_python_checkers = ['pyflakes']
+"let g:syntastic_python_checkers = ['flake8']
 
 map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
 "vnoremap <C-c> "*y
+
+" Move to next/previous errors
+nmap <silent> <leader>k <Plug>(ale_previous_wrap)
+nmap <silent> <leader>j <Plug>(ale_next_wrap)
+
+" Change error symbols
+let g:ale_sign_error = '=>'
+let g:ale_sign_warning = '->'
+
+" Check on file open
+let g:ale_lint_on_enter = 1
+
+" No check on file save
+let g:ale_lint_on_save = 0
+
+" Check on text change
+let g:ale_lint_on_text_changed = 1
+let g:ale_lint_delay = 300 " ms
+
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_enable_on_vim_startup = 1
+
+"NerdTree ignore
+let NERDTreeIgnore = ['\.pyc$']
+
+"python with virtualenv support
+python3 << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+    project_base_dir = os.environ['VIRTUAL_ENV']
+    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+    exec(open(activate_this).read(), dict(__file__=activate_this))
+EOF

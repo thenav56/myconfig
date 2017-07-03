@@ -52,11 +52,11 @@ close(Status);
 
 if ( $status ne $prevStatus ){
     if ( $status eq 'Charging'){
-        system("notify-send -i battery-good-charging Battery \"Plugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
+        system("notify-send.sh -R /tmp/battery-nofity -u low -i battery-good-charging Battery \"Plugged\" && paplay /home/navin/.notify/Soothing-Alerts/AIFF/Connected.aif");
     }elsif( $status eq 'Discharging'){
-        system("notify-send -i battery-medium Battery \"UnPlugged\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
-    }else{
-        system("notify-send -i battery-full-charging Battery \"Battery Full\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg");
+        system("notify-send.sh -R /tmp/battery-nofity -u low -i battery-medium Battery \"UnPlugged\" && paplay /home/navin/.notify/Soothing-Alerts/AIFF/Bloom.aif");
+    }elsif( $status eq 'Full'){
+        system("notify-send.sh -R /tmp/battery-nofity -u low -i battery-full-charging Battery \"Battery Full\" && paplay /home/navin/.notify/Soothing-Alerts/AIFF/Suspended.aif");
     }
 }
 
@@ -85,7 +85,7 @@ if ($percent < 20) {
         my $prevTime = <Time>;
         close(Status);
         if ($time - $prevTime > $diffTime) {
-            system("notify-send -u critical -i battery-caution Battery \"Battery Low\" && paplay /usr/share/sounds/ubuntu/stereo/system-ready.ogg ");
+            system("notify-send.sh -R /tmp/battery-nofity -u critical -i battery-caution Battery \"Battery Low\" && paplay /home/navin/.notify/Print-Complete.wav ");
             open (Time, ">",$filenameTime) or die "cant open file\n";
             print Time $time ;
             close(Time);

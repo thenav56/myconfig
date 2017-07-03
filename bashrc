@@ -115,9 +115,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
+parse_git_branch() {
+ git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[ \1]/'
+}
 
 set -o vi
-PS1='(${debian_chroot:+($debian_chroot)}\[\033[1;32m\]\u\[\033[1;36m\]@\h\[\033[1;36m\]\[\033[00m\]:\[\033[01;31m\]\w\[\033[00m\])$ '
+#PS1='(${debian_chroot:+($debian_chroot)}\[\033[1;32m\]\u\[\033[1;36m\]@\h\[\033[1;36m\]\[\033[00m\]:\[\033[01;31m\]\w\[\033[00m\])\$ '
+PS1='(${debian_chroot:+($debian_chroot)}\[\033[1;32m\]\u\[\033[1;36m\]@\h\[\033[1;36m\]\[\033[00m\]:\[\033[01;31m\]\w\[\033[00m\])\[\033[5;46m\]$(parse_git_branch)\[\033[00m\]\$ '
 #PS1='(${debian_chroot:+($debian_chroot)}\u@navPC\[\033[1;36m\]\[\033[00m\]:\[\033[01;31m\]\w\[\033[00m\])$ '
 
 export PS1
@@ -131,3 +135,4 @@ alias python=python3
 export HISTCONTROL=ignoreboth:erasedups
 export PATH=${PATH}:${HOME}/.config/composer/vendor/bin/
 export PATH=${PATH}:${HOME}/.local/bin/
+export EDITOR=vim

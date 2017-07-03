@@ -98,12 +98,12 @@ bindsym $mod+t exec nmcli device disconnect wlp2s0 && nmcli device connect wlp2s
 bindsym $mod+c exec /home/navin/git/myconfig/script/toggleCompton.sh
 
 #default applications
-set $wallpaper  ~/Pictures/TyDgYyR.jpg
+set $wallpaper  ~/Pictures/wallpaper/70u2bDv.png
 
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    gnome-terminal
-set $editor      vim
+set $editor      gvim
 set $browser     firefox
 set $lockscreen  "$HOME/Pictures/lock-flat.png"
 #workspaces
@@ -116,7 +116,7 @@ set $workspace6 "6: "
 set $workspace7 "7: "
 set $workspace8 "8: "
 set $workspace9 "9: "
-set $workspace10 "10:"
+set $workspace10 "10:"
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
 bindsym $mod+2 workspace $workspace2
@@ -175,7 +175,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
  
   set $base00 #101218
-  set $base01 #011c21
+  set $base01 #2f343e
   #set $base01 #003B46
   set $base02 #252936
   set $base03 #7780a1
@@ -186,7 +186,7 @@ bindsym $mod+r mode "resize"
   set $base08 #ee829f
   set $base09 #f99170
   set $base0A #ffefcc
-  set $base0B #91E5A9
+  set $base0B #00A9A5
   set $base0C #97e0ff
   set $base0D #97bbf7
   set $base0E #c0b7f9
@@ -251,23 +251,29 @@ bindsym $mod+minus scratchpad show
 
 # ** Pulse Audio Controls **
 # increase sound volume
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D default sset Master 5%+
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D default sset Master 5%+ && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume UP $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "/home/navin/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # decrease sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D default sset Master 5%-
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D default sset Master 5%- && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume Down $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "/home/navin/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # toggle mute
-bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
+bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume $(amixer -D pulse get Master | awk '{if(NR==6){ print $6}}')
 # increase brightness 255max
-bindsym XF86MonBrightnessUp exec  /usr/local/bin/brightnessCon +
+bindsym XF86MonBrightnessUp exec --no-startup-id   /usr/local/bin/brightnessCon + && notify-send.sh -R /tmp/brightness-notify -u low -t 1 -i sunny Brightness $(brightnessCon | awk '{if(NR==2){print $2}}')
 # decrease brightness
-bindsym XF86MonBrightnessDown exec  /usr/local/bin/brightnessCon -
+bindsym XF86MonBrightnessDown exec --no-startup-id /usr/local/bin/brightnessCon - && notify-send.sh -R /tmp/brightness-notify -u low -t 1 -i sunny Brightness $(brightnessCon | awk '{if(NR==2){print $2}}')
 # decrease brightness
+# ** Playerctl Audio Controls **
+bindsym XF86AudioPlay exec  playerctl play-pause && notify-send.sh -R /tmp/play-notify -u low -t 1 -i audio-x-generic Play/Pause $(playerctl status)
+bindsym XF86AudioPrev exec  playerctl previous
+bindsym XF86AudioNext exec  playerctl next
+
 # previous workspace
 bindsym $mod+Ctrl+h workspace prev
 # next workspace
 bindsym $mod+Ctrl+l workspace next
 
 #default workspace to open at startup
-exec i3-msg "workspace $workspace2"
+exec i3-msg "workspace $workspace1"
+
 # ScreenEat whole
 bindsym $mod+p exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py
 # ScreenEat Active window
@@ -281,11 +287,14 @@ bindsym $mod+Ctrl+w exec --no-startup-id /usr/bin/$browser
 # $filemanager shortcut
 bindsym $mod+Ctrl+f exec --no-startup-id $filemanager
 
+# $filemanager shortcut
+bindsym $mod+Shift+w exec --no-startup-id feh --randomize --bg-fill ~/Pictures/wallpaper/*
+
 # vlc shortcut
 bindsym $mod+Ctrl+v exec --no-startup-id vlc
 
 # editor shortcut
-bindsym $mod+Ctrl+e exec --no-startup-id $editor
+bindsym $mod+Ctrl+e exec --no-startup-id $terminal -e $editor
 #bindsym Ctrl+Mod4+l exec xautolock -locknow
 
 # --------------------------------------------------------------
@@ -294,14 +303,14 @@ bindsym $mod+Ctrl+e exec --no-startup-id $editor
 
 exec_always /home/navin/git/myconfig/script/toggleCompton.sh
 #set wallpaper
-exec_always  feh --bg-scale $wallpaper
+exec_always  feh --bg-fill $wallpaper
 #start redshift
 exec redshift-gtk
 # start manbatitalika
 #exec ~/git/mainbatti-talika/mainbatti-indicator.py
 # workspace 1 - browser
 exec /usr/bin/$browser
-exec /usr/bin/google-chrome
+exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/google-chrome'
 
 # Sound
 exec --no-startup-id pasystray --volume-max=150
@@ -322,12 +331,8 @@ exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
 # workspace 9 - $filemanager
 exec --no-startup-id i3-msg 'workspace $workspace9; exec $filemanager'
 
-# workspace 8 -music 
+# workspace 8 -music
 #exec $musicplayer
-# --------------------------------------------------------------
-# move to workspace 2 aka terminal
-exec --no-startup-id i3-msg 'workspace $workspace2;'
-exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -u -a -msg -lines 10 -eh 2 -width 100 -padding 300 -opacity 85 -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Ubuntu 18"'
 
 # -------- move application to workspace --------  use xprop in terminal
 
@@ -343,5 +348,10 @@ assign [class="(?i)skype"] → $workspace4
 assign [class="(?i)viber"] → $workspace4
 assign [class="(?i)WMail"] → $workspace4
 assign [class="(?i)Slack"] → $workspace4
+assign [class="(?i)GitKraken"] → $workspace10
 
 assign [class="(?i)jetbrains-studio"] → $workspace6
+
+# -------- float application  --------  use xprop in terminal
+for_window [class="(?i)GitKraken"] floating enable
+for_window [window_role="pop-up"] floating enable
