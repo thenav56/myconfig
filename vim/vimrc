@@ -20,8 +20,11 @@ Plug  'nvie/vim-flake8'
 Plug  'Valloric/YouCompleteMe'
 Plug  'w0rp/ale'
 Plug  'Konfekt/FastFold'
-"Plug  'scrooloose/syntastic'
+Plug  'wakatime/vim-wakatime'
 Plug  'vim-airline/vim-airline'
+Plug  'airblade/vim-gitgutter'
+"Plug  'scrooloose/syntastic'
+
 call plug#end()
 
 " Now we can turn our filetype functionality back on
