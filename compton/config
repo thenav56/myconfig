@@ -1,3 +1,9 @@
+fading = true;
+fade-delta = 5;
+fade-in-step = 0.03;
+fade-out-step = 0.03;
+no-fading-openclose = false;
+
 shadow-exclude = [
     "! name~=''",
     "name = 'Notification'",

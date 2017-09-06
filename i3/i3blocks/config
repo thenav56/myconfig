@@ -53,6 +53,11 @@ label=
 command=$HOME/.config/i3blocks/disk
 interval=30
 
+[system-disk]
+label=
+command=$HOME/.config/i3blocks/disk-system
+interval=30
+
 [cpu]
 label=
 command=/usr/share/i3blocks/cpu_usage
