@@ -5,6 +5,18 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+# default variables
+set $wallpaper  ~/Pictures/wallpaper/heroku-x-python-wallpaper-screen-3840×2160-uniform.png
+
+set $musicplayer rhythmbox
+set $filemanager thunar
+set $terminal    gnome-terminal
+set $editor      gvim
+set $browser     firefox
+set $lockscreen  "$HOME/Pictures/lock-flat.png"
+set $myconfigPath $HOME/git/myconfig
+set $screeneatPath $HOME/git/ScreenEat
+
 set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -100,17 +112,8 @@ bindsym $mod+a focus parent
 #bindsym $mod+t exec nmcli connection up toggle
 bindsym $mod+t exec nmcli device disconnect wlp2s0 && nmcli device connect wlp2s0
 
-bindsym $mod+c exec /home/navin/git/myconfig/script/toggleCompton.sh
+bindsym $mod+c exec $myconfigPath/script/toggleCompton.sh
 
-#default applications
-set $wallpaper  ~/Pictures/wallpaper/heroku-x-python-wallpaper-screen-3840×2160-uniform.png
-
-set $musicplayer rhythmbox
-set $filemanager thunar
-set $terminal    gnome-terminal
-set $editor      gvim
-set $browser     firefox
-set $lockscreen  "$HOME/Pictures/lock-flat.png"
 #workspaces
 set $workspace1 "1: "
 set $workspace2 "2: "
@@ -207,7 +210,7 @@ hide_edge_borders both
   client.urgent           $base02 $base08    $base00 $base0F
 
 #bindsym lock screen
-bindsym $mod+Shift+x exec /home/navin/git/myconfig/script/lock.sh $lockscreen
+bindsym $mod+Shift+x exec $myconfigPath/script/lock.sh $lockscreen
 #bindsyn lock+suspend 
 #bindsym $mod+Shift+s exec lock.sh $lockscreen && systemctl suspend
 bindsym $mod+Shift+s exec gnome-screensaver-command -l && systemctl suspend
@@ -257,9 +260,9 @@ bindsym $mod+minus scratchpad show
 
 # ** Pulse Audio Controls **
 # increase sound volume
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D default sset Master 5%+ && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume UP $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "/home/navin/.notify/Soothing-Alerts/WAV/High Boom.wav"
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D default sset Master 5%+ && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume UP $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # decrease sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D default sset Master 5%- && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume Down $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "/home/navin/.notify/Soothing-Alerts/WAV/High Boom.wav"
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D default sset Master 5%- && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume Down $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # toggle mute
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume $(amixer -D pulse get Master | awk '{if(NR==6){ print $6}}')
 # increase brightness 255max
@@ -281,11 +284,11 @@ bindsym $mod+Ctrl+l workspace next
 exec i3-msg "workspace $workspace1"
 
 # ScreenEat whole
-bindsym $mod+p exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py
+bindsym $mod+p exec --no-startup-id $screeneatPath/screeneat.py
 # ScreenEat Active window
-bindsym $mod+o exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py --active
+bindsym $mod+o exec --no-startup-id $screeneatPath/screeneat.py --active
 # ScreenEat cropped
-bindsym $mod+i exec --no-startup-id /home/navin/git/ScreenEat/screeneat.py --cropped
+bindsym $mod+i exec --no-startup-id $screeneatPath/screeneat.py --cropped
 
 # $browser shortcut
 bindsym $mod+Ctrl+w exec --no-startup-id /usr/bin/$browser
@@ -307,7 +310,7 @@ bindsym $mod+Ctrl+e exec --no-startup-id $terminal -e $editor
 
 # ------- Start applications in workspace during startup ----
 
-exec_always /home/navin/git/myconfig/script/toggleCompton.sh
+exec_always $myconfigPath/script/toggleCompton.sh
 #set wallpaper
 exec_always  feh --bg-fill $wallpaper
 #start redshift
@@ -336,6 +339,7 @@ exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
 #exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
 # workspace 5 - tudu
 #exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e tudu'
+exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e "vim $HOME/git/todo.txt"'
 # workspace 9 - $filemanager
 #exec --no-startup-id i3-msg 'workspace $workspace9; exec $filemanager'
 
