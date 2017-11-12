@@ -7,23 +7,30 @@ call plug#begin('~/.vim/plugged')
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
 "Plug  'itchyny/lightline.vim'
+Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug  'junegunn/fzf.vim'
 Plug  'mhinz/vim-startify'
+Plug  'suan/vim-instant-markdown'
+Plug  'felixhummel/setcolors.vim'
 "Plug  'Yggdroot/indentLine'
+Plug 'eugen0329/vim-esearch'
+Plug  'flazz/vim-colorschemes'
 Plug  'FredKSchott/CoVim'
 Plug  'Chiel92/vim-autoformat'
 Plug  'vim-airline/vim-airline-themes'
 Plug  'scrooloose/nerdcommenter'
+Plug  'terryma/vim-multiple-cursors'
 Plug  'nathanaelkane/vim-indent-guides'
-Plug  'tpope/vim-fugitive'
-Plug  'scrooloose/nerdtree'
-Plug  'ctrlpvim/ctrlp.vim'
+Plug  'tpope/vim-fugitive' " git wrapper for git e.g Gdiff :P
+Plug  'scrooloose/nerdtree' " file explorer
+"Plug  'ctrlpvim/ctrlp.vim' " Aweseme file finder
 Plug  'nvie/vim-flake8'
-Plug  'Valloric/YouCompleteMe'
-Plug  'w0rp/ale'
+Plug  'Valloric/YouCompleteMe' " Shows suggestions
+Plug  'w0rp/ale' " Awesome aync linter manager
 Plug  'Konfekt/FastFold'
-Plug  'wakatime/vim-wakatime'
+Plug  'wakatime/vim-wakatime' " tracks hours to wakatime site
 Plug  'vim-airline/vim-airline'
-Plug  'airblade/vim-gitgutter'
+Plug  'airblade/vim-gitgutter' " shows git diff
 "Plug  'scrooloose/syntastic'
 
 call plug#end()
@@ -49,7 +56,8 @@ set mousehide                                       " Hide mouse while typing
 set mouse=a                                         " Enable mouse for all modes
 set incsearch                                       " Show match for partly typed search command
 set hlsearch                                        " Highlight search
-set ignorecase                                      " Uses case insensitive search
+set noscs scs                                       " Uses case insensitive search
+set noic ic                                         " override 'ignorecase' when pattern has upper Case
 set splitbelow                                      " A new window is put below the current one
 set splitright                                      " A new window is put right of the current one
 set history=100                                     " Set number of command line history remembered
@@ -79,7 +87,7 @@ set softtabstop=4                                   " number of spaces to insert
 set autoindent                                      " Auto indentation
 set smartindent                                     " Do clever auto indentation
 set nowrap                                          " Don't wrap long lines
-set clipboard=unnamedplus                          "vim uses system clipboard to copy/paste
+set clipboard=unnamedplus                           "vim uses system clipboard to copy/paste
 set whichwrap=b,s,h,l,<,>,[,]                       " Backspace and cursor keys wrap too
 set splitbelow                                      "split below
 set splitright
@@ -87,10 +95,12 @@ set splitright
 "
 
 set termguicolors
-let colorSchemeL="seoul256-light"
-let colorSchemeD="neodark"
+" Tomorrow, Tomorrow-Night, one
+let colorSchemeL="PaperColor"
+" PaperColor, one, evening
+let colorSchemeD="PaperColor"
 let colorAirlineL="papercolor"
-let colorAirlineD="luna"
+let colorAirlineD="badwolf"
 
 au Filetype python call SetPython()
 function! SetPython()
@@ -101,25 +111,33 @@ endfunction
 
 function! ToggleTheme()
   let cColors = g:colors_name
-  let background = (cColors == g:colorSchemeL)? "dark" : "light"
+  let background = (g:thenav_current_theme == "light")? "dark" : "light"
   let g:airline_theme = (cColors == g:colorSchemeL)? g:colorAirlineD : g:colorAirlineL
   exec "set background =". background
-  let tColors = (cColors == g:colorSchemeL)? g:colorSchemeD:g:colorSchemeL
+  let tColors = (g:thenav_current_theme == "light")? g:colorSchemeD:g:colorSchemeL
+  let g:thenav_current_theme = (g:thenav_current_theme == "light")? "dark" : "light"
   exec "color ". tColors
   redraw
 endfunction
 
 " UI
 let hour = strftime("%H")
-if 6 <= hour && hour < 18
+if  ( 6 <= hour && hour < 18)
   set background=light
   let g:airline_theme = g:colorAirlineL
+  let g:thenav_current_theme = "light"
   exec "color ". colorSchemeL
 else
   set background=dark
+  let g:thenav_current_theme = "dark"
   let g:airline_theme = g:colorAirlineD
   exec "color ". colorSchemeD
 endif
+
+set background=dark
+let g:thenav_current_theme = "dark"
+let g:airline_theme = g:colorAirlineD
+exec "color ". colorSchemeD
 
 if has('gui_running')
     set guifont=Hack\ 10.5    "Powerline\ Consolas\ 10
@@ -151,7 +169,7 @@ set iskeyword-=.                                    " '.' is an end of word desi
 set list                                            " Useful to see difference between tab and space
 set listchars=tab:›\ ,trail:•,extends:#,nbsp:.      " Highlight problematic whitespace
 set wildmenu                                        " Command-line completion show a list of matches
-set wildmode=list:longest                           " Specifies how command line completion works
+set wildmode=longest:full,full                      " Specifies how command line completion works
 set wildignore=*.o,*.obj                            " List of file patterns ignored while expanding wildcards
 set wildignorecase                                  " Ignore case when completing file names
 
@@ -161,46 +179,75 @@ let mapleader = ','
 
 " MAPPINGS
 map <leader>s :source ~/.vim/vimrc<CR>
+nmap <leader>n :NERDTreeFind <CR>
 nnoremap <tab> :NERDTreeToggle <CR>
 " nice navigation in splits
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-" Setup some default ignores
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|pyc)$',
-\}
-let g:ctrlp_max_files=0
+
+nmap <C-P> :Files <CR>
+nmap ; :Buffers<CR>
+nmap <leader>bs :History<cr>
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+"nmap ; :CtrlPBuffer<CR>
+"let g:ctrlp_max_files=0
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
-let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_open_multiple_files = 'ij' "avoid opening into split window on <c-o>
+"let g:ctrlp_working_path_mode = 'r'
+"let g:ctrlp_open_multiple_files = 'ij' "avoid opening into split window on <c-o>
 " Use a leader instead of the actual named binding
-nmap <leader>p :CtrlP<cr>
-nmap ; :CtrlPBuffer<CR>
+"nmap <leader>p :CtrlP<cr>
+"nmap ; :CtrlPBuffer<CR>
+
+" Easy bindings for its various modes
+"nmap <leader>bb :CtrlPBuffer<CR>
+"nmap <leader>bm :CtrlPMixed<cr>
+"nmap <leader>bs :CtrlPMRU<cr>
+
+" CtrlP
+"let g:ctrlp_working_path_mode = 'rw'
+" Using ag for faster load
+"if executable('ag')
+    "let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+        "\ --skip-vcs-ignores
+        "\ --ignore .git
+        "\ --ignore .cache
+        "\ --ignore bower_components
+        "\ --ignore node_modules
+        "\ --ignore .tox
+        "\ --ignore "*.tmp"
+        "\ --ignore "*.swp"
+        "\ --ignore "*.o"
+        "\ --ignore "*.obj"
+        "\ --ignore "*.pyc"
+        "\ --ignore "*~"
+        "\ -g ""'
+    "let g:ctrlp_cache_dir = $home . '/.vim/tmp/cache/ctrlp'
+"endif
 
 " Easy buffer navigation
 nnoremap m :bprev<CR>
 nnoremap ,, :bnext<CR>
-nmap <C-c> :bd<CR>
+nmap <leader>q :bd<CR>
 
-" Easy bindings for its various modes
-nmap <leader>bb :CtrlPBuffer<CR>
-nmap <leader>bm :CtrlPMixed<cr>
-nmap <leader>bs :CtrlPMRU<cr>
-nmap <leader>n :bnext<cr>
 nmap <leader>p :bprevious<cr>
-nmap <leader>c :bd<cr>
+
+"nmap <leader>c :bd<cr>
 "Quickly edit/reload the vimrc file
 nmap <silent> <leader>e :e $MYVIMRC<CR>
 nmap <silent> <leader>r :so $MYVIMRC<CR>
 " Change Working Directory to that of the current file
 cmap cd. cd %:p:h
+
 " For when you forget to sudo
 cmap w!! w !sudo tee %
+
+" set foldmenthod indent
+cmap f!! setlocal foldmethod=indent
 
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
@@ -256,9 +303,17 @@ omap <Leader>/ <Plug>(easymotion-tn)
 nmap <silent> <leader>k <Plug>(ale_previous_wrap)
 nmap <silent> <leader>j <Plug>(ale_next_wrap)
 
+" Cd to open file directory
+nnoremap ,cd :cd %:p:h<CR>
+
+" folding
+"set foldmethod=syntax
+set foldcolumn=1
+
 " js
 let g:ale_linters = { 
 \   'javascript': ['eslint'],
+\   'scss': ['scss-lint'],
 \}
 let g:jsx_ext_required = 0
 
@@ -281,11 +336,6 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_enable_on_vim_startup = 1
 
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$\|android\|ios',
-  \ 'file': '\.so$\|\.dat$|\.DS_Store$|yarn\.lock'
-  \ }
-
 "NerdTree ignore
 let NERDTreeIgnore = ['\.pyc$']
 
@@ -298,3 +348,29 @@ if 'VIRTUAL_ENV' in os.environ:
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
     exec(open(activate_this).read(), dict(__file__=activate_this))
 EOF
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+" Default mapping multi cursor
+let g:multi_cursor_next_key='<C-n>'
+let g:multi_cursor_prev_key='<C-p>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+
+" :InstantMarkdownPreview
+let g:instant_markdown_autostart = 0
+
+let g:ale_javascript_eslint_executable = 'eslint_d'
+
+
+let g:esearch = {
+  \ 'adapter':    'ag',
+  \ 'backend':    'system',
+  \ 'out':        'qflist',
+  \ 'batch_size': 1000,
+  \ 'use':        ['word_under_cursor', 'hlsearch', 'last'],
+  \}
+
+let esearch#cmdline#help_prompt = 0

@@ -6,16 +6,17 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 # default variables
-set $wallpaper  ~/Pictures/wallpaper/heroku-x-python-wallpaper-screen-3840×2160-uniform.png
+set $wallpaper  ~/Pictures/wallpaper/heroku-x-python-wallpaper-screen-3840×2160.png
 
 set $musicplayer rhythmbox
 set $filemanager thunar
-set $terminal    gnome-terminal
+set $terminal    termite
 set $editor      gvim
 set $browser     firefox
 set $lockscreen  "$HOME/Pictures/lock-flat.png"
 set $myconfigPath $HOME/git/myconfig
 set $screeneatPath $HOME/git/ScreenEat
+set $popup-height 34
 
 set $mod Mod1
 
@@ -111,6 +112,7 @@ bindsym $mod+a focus parent
 #bindsym $mod+t exec rfkill block wifi && rfkill unblock wifi
 #bindsym $mod+t exec nmcli connection up toggle
 bindsym $mod+t exec nmcli device disconnect wlp2s0 && nmcli device connect wlp2s0
+bindsym $mod+b exec bt-sync
 
 bindsym $mod+c exec $myconfigPath/script/toggleCompton.sh
 
@@ -125,6 +127,7 @@ set $workspace7 "7: "
 set $workspace8 "8: "
 set $workspace9 "9: "
 set $workspace10 "10:"
+
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
 bindsym $mod+2 workspace $workspace2
@@ -183,8 +186,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
  
   set $base00 #101218
-  #set $base01 #2f343e
-  set $base01 #243547
+  set $base01 #161b1d00
+  #set $base01 #243547
   set $base02 #252936
   set $base03 #7780a1
   set $base04 #C0C5CE
@@ -194,7 +197,7 @@ bindsym $mod+r mode "resize"
   set $base08 #ee829f
   set $base09 #f99170
   set $base0A #ffefcc
-  set $base0B #00A9A5
+  set $base0B #ffffff
   set $base0C #97e0ff
   set $base0D #97bbf7
   set $base0E #c0b7f9
@@ -205,12 +208,11 @@ hide_edge_borders both
 # Widow Colours
 #                         border  background text    indicator
   client.focused          $base01 $base01    $base0B $base0F
-  client.focused_inactive $base02 $base02    $base03 $base0F
-  client.unfocused        $base02 $base02    $base03 $base0F
+  client.focused_inactive $base01 $base01    $base03 $base0F
+  client.unfocused        $base01 $base01    $base03 $base0F
   client.urgent           $base02 $base08    $base00 $base0F
 
 #bindsym lock screen
-bindsym $mod+Shift+x exec $myconfigPath/script/lock.sh $lockscreen
 #bindsyn lock+suspend 
 #bindsym $mod+Shift+s exec lock.sh $lockscreen && systemctl suspend
 bindsym $mod+Shift+s exec gnome-screensaver-command -l && systemctl suspend
@@ -218,11 +220,16 @@ bindsym $mod+Shift+s exec gnome-screensaver-command -l && systemctl suspend
 # finds out, if available)
 bar {
         status_command i3blocks
+        i3bar_command i3bar -t
+        strip_workspace_numbers yes
+        tray_output eDP-1
+        tray_padding 1
         position top
         #font xft: FontAwesome , Ubuntu,  pango 11
         font xft: FontAwesome, MyriadPro Regular  11
-        colors{
 
+        colors {
+             statusline #FFFFFF
              separator $base03
              background $base01
                                #border  background text
@@ -233,6 +240,23 @@ bar {
 
         }
 }
+
+set $mode_power Power: [l]ock [e]logout [s]uspend [h]ibernate [r]eboot [p]oweroff
+bindsym $mod+Shift+x mode "$mode_power"
+mode "$mode_power" {
+    bindsym l mode "default", exec --no-startup-id $myconfigPath/script/lock.sh $lockscreen
+    bindsym e mode "default", exec --no-startup-id $myconfigPath/script/i3exit logout
+    bindsym s mode "default", exec --no-startup-id $myconfigPath/script/i3exit suspend
+    bindsym h mode "default", exec --no-startup-id $myconfigPath/script/i3exit hibernate
+    bindsym r mode "default", exec --no-startup-id $myconfigPath/script/i3exit reboot
+    bindsym p mode "default", exec --no-startup-id $myconfigPath/script/i3exit shutdown
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+
+popup_during_fullscreen smart
 
 # Don't change focus with mouse
 focus_follows_mouse no
@@ -260,9 +284,9 @@ bindsym $mod+minus scratchpad show
 
 # ** Pulse Audio Controls **
 # increase sound volume
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D default sset Master 5%+ && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume UP $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
+bindsym XF86AudioRaiseVolume exec --no-startup-id $myconfigPath/script/volume.py up 5 && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume UP [$($myconfigPath/script/volume.py read)%] && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # decrease sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D default sset Master 5%- && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume Down $(amixer -D default get Master | awk '{if(NR==5){print $4}}') && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
+bindsym XF86AudioLowerVolume exec --no-startup-id $myconfigPath/script/volume.py down 5 && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume Down [$($myconfigPath/script/volume.py read)%] && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # toggle mute
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume $(amixer -D pulse get Master | awk '{if(NR==6){ print $6}}')
 # increase brightness 255max
@@ -271,7 +295,7 @@ bindsym XF86MonBrightnessUp exec --no-startup-id   /usr/local/bin/brightnessCon 
 bindsym XF86MonBrightnessDown exec --no-startup-id /usr/local/bin/brightnessCon - && notify-send.sh -R /tmp/brightness-notify -u low -t 1 -i sunny Brightness $(brightnessCon | awk '{if(NR==2){print $2}}')
 # decrease brightness
 # ** Playerctl Audio Controls **
-bindsym XF86AudioPlay exec  playerctl play-pause && notify-send.sh -R /tmp/play-notify -u low -t 1 -i audio-x-generic Play/Pause $(playerctl status)
+bindsym XF86AudioPlay exec  playerctl play-pause && notify-send.sh -R /tmp/play-notify -u low -t 1 -i music Play/Pause $(playerctl status)
 bindsym XF86AudioPrev exec  playerctl previous
 bindsym XF86AudioNext exec  playerctl next
 
@@ -310,9 +334,10 @@ bindsym $mod+Ctrl+e exec --no-startup-id $terminal -e $editor
 
 # ------- Start applications in workspace during startup ----
 
-exec_always $myconfigPath/script/toggleCompton.sh
+exec $myconfigPath/script/toggleCompton.sh
 #set wallpaper
 exec_always  feh --bg-fill $wallpaper
+#exec feh --bg-fill $wallpaper
 #start redshift
 exec redshift-gtk
 # start manbatitalika
@@ -331,20 +356,22 @@ exec --no-startup-id gnome-settings-daemon
 
 # workspace 4
 #exec --no-startup-id i3-msg 'workspace $workspace1; exec /opt/viber/Viber'
-#exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/skypeforlinux'
-exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/slack'
+exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/skypeforlinux'
+exec --no-startup-id i3-msg 'workspace $workspace4; exec /usr/bin/slack'
+#exec --no-startup-id i3-msg 'workspace $workspace4; exec /opt/trello/Trello'
 
 # workspace 3,4 - terminal
 exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
 #exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
 # workspace 5 - tudu
 #exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e tudu'
-exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e "vim $HOME/git/todo.txt"'
+exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e "vim $HOME/git/todo.md"'
 # workspace 9 - $filemanager
 #exec --no-startup-id i3-msg 'workspace $workspace9; exec $filemanager'
 
 # workspace 8 -music
 #exec $musicplayer
+exec --no-startup-id pactl load-module module-bluetooth-discover                                                                  <<<
 
 # -------- move application to workspace --------  use xprop in terminal
 
@@ -357,13 +384,28 @@ assign [class="(?i)$editor"]  → $workspace3
 
 
 assign [class="(?i)skype"] → $workspace4
+assign [class="(?i)trello"] → $workspace4
 assign [class="(?i)viber"] → $workspace4
 assign [class="(?i)WMail"] → $workspace4
 assign [class="(?i)Slack"] → $workspace4
 assign [class="(?i)GitKraken"] → $workspace10
-
 assign [class="(?i)jetbrains-studio"] → $workspace6
 
 # -------- float application  --------  use xprop in terminal
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+
+for_window [class="(?i)blueman"] floating enable
+for_window [class="(?i)pavucontrol"] floating enable, move position mouse
+for_window [class="(?i)arandr"] floating enable,  move down $popup-height px
+for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $popup-height px
 for_window [class="(?i)GitKraken"] floating enable
 for_window [window_role="pop-up"] floating enable
+
+# gaps
+for_window [class="^.*"] border pixel 0
+gaps inner 5
+gaps outer 5
+smart_gaps on

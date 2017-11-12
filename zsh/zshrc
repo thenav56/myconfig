@@ -76,6 +76,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 
 alias python=python3
+alias tmux="TERM=screen-256color-bce tmux"
 
 export PATH=${PATH}:${HOME}/.config/composer/vendor/bin/
 export PATH=${PATH}:${HOME}/.local/bin/
@@ -113,6 +114,12 @@ bindkey '^ ' autosuggest-accept
 
 
 ############ Custom Addon
+
+# Returns whether the given command is executable or aliased.
+_has() {
+  return $( whence $1 >/dev/null )
+}
+
 # load virtualenv from ~/.venv
 function venvactive()
 {
@@ -142,3 +149,21 @@ function totalnumberoffiles()
 
 # added by travis gem
 [ -f /home/navin/.travis/travis.sh ] && source /home/navin/.travis/travis.sh
+
+if [[ $TERM == xterm-termite ]]; then
+  . /etc/profile.d/vte-2.91.sh
+  __vte_osc7
+fi
+
+# fzf + ag configuration
+if _has fzf && _has ag; then
+  export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_DEFAULT_OPTS='
+--color fg:252,bg:233,hl:67,fg+:252,bg+:235,hl+:81
+--color info:144,prompt:161,spinner:135,pointer:135,marker:118
+  '
+fi
+
+eval $(thefuck --alias)
