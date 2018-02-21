@@ -6,42 +6,36 @@ call plug#begin('~/.vim/plugged')
 " This is the Vundle package, which can be found on GitHub.
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
-"Plug  'itchyny/lightline.vim'
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug  'junegunn/fzf.vim'
+Plug  'tweekmonster/startuptime.vim'
 Plug  'mhinz/vim-startify'
 Plug  'suan/vim-instant-markdown'
 Plug  'felixhummel/setcolors.vim'
-"Plug  'Yggdroot/indentLine'
-Plug 'eugen0329/vim-esearch'
-Plug  'flazz/vim-colorschemes'
-Plug  'FredKSchott/CoVim'
+Plug  'junegunn/goyo.vim'
+Plug  'sheerun/vim-polyglot'
+Plug  'eugen0329/vim-esearch'
 Plug  'Chiel92/vim-autoformat'
-Plug  'vim-airline/vim-airline-themes'
-Plug  'scrooloose/nerdcommenter'
-Plug  'terryma/vim-multiple-cursors'
+Plug  'tpope/vim-commentary'
 Plug  'nathanaelkane/vim-indent-guides'
 Plug  'tpope/vim-fugitive' " git wrapper for git e.g Gdiff :P
+Plug  'airblade/vim-gitgutter' " shows git diff
 Plug  'scrooloose/nerdtree' " file explorer
-"Plug  'ctrlpvim/ctrlp.vim' " Aweseme file finder
 Plug  'nvie/vim-flake8'
 Plug  'Valloric/YouCompleteMe' " Shows suggestions
 Plug  'w0rp/ale' " Awesome aync linter manager
-Plug  'Konfekt/FastFold'
 Plug  'wakatime/vim-wakatime' " tracks hours to wakatime site
-Plug  'vim-airline/vim-airline'
-Plug  'airblade/vim-gitgutter' " shows git diff
-"Plug  'scrooloose/syntastic'
+Plug  'itchyny/lightline.vim'
+Plug  'rakr/vim-one'
 
 call plug#end()
 
 " Now we can turn our filetype functionality back on
-filetype plugin indent on
+filetype plugin on
 syntax on
 
-"set runtimepath -=~/.vim/bundle/YouCompleteMe       "disable plugin without deleting it / temporarily 
-
 " GENERAL
+set synmaxcol=250                                   " syntax highlighting line size limit
 set nocompatible                                    " Don't behave very Vi compatible
 set encoding=utf-8                                  " Set character encoding
 set lazyredraw                                      " Don't draw while executing macros
@@ -70,12 +64,24 @@ set undolevels=1000                                 " Over 1000 levels of undo
 set undoreload=10000                                " Maximum number lines to save for undo on a buffer reload
 set backup                                          " Enable backup
 set backupdir=~/.vim/tmp/backup,/tmp                " Set backup dir
+set showmatch                                       " When inserting bracket, briefly jump to its match
+set number                                          " Show line number for each line
+set cursorline                                      " Show cursor line
+set fillchars+=vert:\                               " Remove ugly | in split
+set laststatus=2
+set shortmess=filmnrxoOtT                           " Show short message to avoid hit-enter
+set viewoptions=folds,options,cursor,unix,slash     " Better Unix / Windows compatibility
+set iskeyword-=.                                    " '.' is an end of word designator
+set list                                            " Useful to see difference between tab and space
+set listchars=tab:›\ ,trail:•,extends:#,nbsp:.      " Highlight problematic whitespace
+set wildmenu                                        " Command-line completion show a list of matches
+set wildmode=longest:full,full                      " Specifies how command line completion works
+" List of file patterns ignored while expanding wildcards
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.yardoc/*,*/js-build/*,*/node_modules/*,*.exe,*.so,*.dat,*.o,*.obj,*.pyc
+set wildignorecase                                  " Ignore case when completing file names
+set t_Co=256                                    " Set terminal color to 256
 
-if !has('nvim')
-    set viminfo+=n~/.vim/tmp/viminfo                " Put viminfo inside .vim/tmp folder
-else
-    set viminfo+=n~/.vim/tmp/viminfo.nvim           " Put viminfo inside .vim/tmp folder
-endif
+set viminfo+=n~/.vim/tmp/viminfo                " Put viminfo inside .vim/tmp folder
 
 " FORMATTING
 set backspace=indent,eol,start                      " Smart backspace
@@ -92,15 +98,6 @@ set whichwrap=b,s,h,l,<,>,[,]                       " Backspace and cursor keys 
 set splitbelow                                      "split below
 set splitright
 "set wrapmargin=10                                  " Number of characters from right window border where wrapping starts
-"
-
-set termguicolors
-" Tomorrow, Tomorrow-Night, one
-let colorSchemeL="PaperColor"
-" PaperColor, one, evening
-let colorSchemeD="PaperColor"
-let colorAirlineL="papercolor"
-let colorAirlineD="badwolf"
 
 au Filetype python call SetPython()
 function! SetPython()
@@ -109,10 +106,13 @@ function! SetPython()
     execute "setlocal colorcolumn=".join(range(80,80+255-1),",")
 endfunction
 
+set termguicolors
+let colorSchemeL="one"
+let colorSchemeD="one"
+
 function! ToggleTheme()
   let cColors = g:colors_name
   let background = (g:thenav_current_theme == "light")? "dark" : "light"
-  let g:airline_theme = (cColors == g:colorSchemeL)? g:colorAirlineD : g:colorAirlineL
   exec "set background =". background
   let tColors = (g:thenav_current_theme == "light")? g:colorSchemeD:g:colorSchemeL
   let g:thenav_current_theme = (g:thenav_current_theme == "light")? "dark" : "light"
@@ -120,126 +120,53 @@ function! ToggleTheme()
   redraw
 endfunction
 
+" Toggle Dark/light Theme
+nmap <leader>bg :call ToggleTheme()<CR>
+
 " UI
 let hour = strftime("%H")
-if  ( 6 <= hour && hour < 18)
+if  ( 6 <= hour && hour < 15)
   set background=light
-  let g:airline_theme = g:colorAirlineL
   let g:thenav_current_theme = "light"
   exec "color ". colorSchemeL
 else
   set background=dark
   let g:thenav_current_theme = "dark"
-  let g:airline_theme = g:colorAirlineD
   exec "color ". colorSchemeD
 endif
-
-set background=dark
-let g:thenav_current_theme = "dark"
-let g:airline_theme = g:colorAirlineD
-exec "color ". colorSchemeD
-
-if has('gui_running')
-    set guifont=Hack\ 10.5    "Powerline\ Consolas\ 10
-    set guioptions -=m                              " Remove menubar
-    set guioptions -=T                              " Remove GUI toolbar
-    set guioptions -=l                              " Remove left-hand scroll bar
-    set guioptions -=r                              " Remove right-hand scroll bar
-    set guioptions -=L                              " Remove left-hand scroll bar
-    set guioptions -=R                              " Remove left-hand scroll bar
-else
-    set t_Co=256                                    " Set terminal color to 256
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-set showmatch                                       " When inserting bracket, briefly jump to its match
-set number                                          " Show line number for each line
-set cursorline                                      " Show cursor line
-set fillchars+=vert:\                               " Remove ugly | in split
-set laststatus=2
-
-if has('cmdline_info')
-    set ruler                                           " Shows current position below each window
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)  " A ruler on steroids
-    set showcmd                                         " Show command in the last line of the screen
-    set showmode                                        " Show current mode in last line
-endif
-set shortmess=filmnrxoOtT                           " Show short message to avoid hit-enter
-set viewoptions=folds,options,cursor,unix,slash     " Better Unix / Windows compatibility
-set iskeyword-=.                                    " '.' is an end of word designator
-set list                                            " Useful to see difference between tab and space
-set listchars=tab:›\ ,trail:•,extends:#,nbsp:.      " Highlight problematic whitespace
-set wildmenu                                        " Command-line completion show a list of matches
-set wildmode=longest:full,full                      " Specifies how command line completion works
-set wildignore=*.o,*.obj                            " List of file patterns ignored while expanding wildcards
-set wildignorecase                                  " Ignore case when completing file names
-
 
 " Map leader to ,
 let mapleader = ','
 
-" MAPPINGS
-map <leader>s :source ~/.vim/vimrc<CR>
-nmap <leader>n :NERDTreeFind <CR>
-nnoremap <tab> :NERDTreeToggle <CR>
 " nice navigation in splits
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" FZF Configs
 nmap <C-P> :Files <CR>
-nmap ; :Buffers<CR>
-nmap <leader>bs :History<cr>
+nmap <c-c> :Commands<CR>
 imap <c-x><c-l> <plug>(fzf-complete-line)
+nmap <leader>bs :History<cr>                " Search Files History
+nmap <leader>bh :History:<cr>               " Search Command History
+nmap <leader>cc :Colors<cr>
+nmap ; :Buffers<CR>
 
-"nmap ; :CtrlPBuffer<CR>
-"let g:ctrlp_max_files=0
-" Use the nearest .git directory as the cwd
-" This makes a lot of sense if you are working on a project that is in version
-" control. It also supports works with .svn, .hg, .bzr.
-"let g:ctrlp_working_path_mode = 'r'
-"let g:ctrlp_open_multiple_files = 'ij' "avoid opening into split window on <c-o>
-" Use a leader instead of the actual named binding
-"nmap <leader>p :CtrlP<cr>
-"nmap ; :CtrlPBuffer<CR>
+let g:fzf_action = {
+    \ 'ctrl-q': 'wall | bdelete',
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-x': 'split',
+    \ 'ctrl-v': 'vsplit'
+\}
 
-" Easy bindings for its various modes
-"nmap <leader>bb :CtrlPBuffer<CR>
-"nmap <leader>bm :CtrlPMixed<cr>
-"nmap <leader>bs :CtrlPMRU<cr>
+" paste without overwriting the buffer
+map <leader>p c<C-R>0<Esc>
 
-" CtrlP
-"let g:ctrlp_working_path_mode = 'rw'
-" Using ag for faster load
-"if executable('ag')
-    "let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-        "\ --skip-vcs-ignores
-        "\ --ignore .git
-        "\ --ignore .cache
-        "\ --ignore bower_components
-        "\ --ignore node_modules
-        "\ --ignore .tox
-        "\ --ignore "*.tmp"
-        "\ --ignore "*.swp"
-        "\ --ignore "*.o"
-        "\ --ignore "*.obj"
-        "\ --ignore "*.pyc"
-        "\ --ignore "*~"
-        "\ -g ""'
-    "let g:ctrlp_cache_dir = $home . '/.vim/tmp/cache/ctrlp'
-"endif
-
-" Easy buffer navigation
-nnoremap m :bprev<CR>
-nnoremap ,, :bnext<CR>
-nmap <leader>q :bd<CR>
-
-nmap <leader>p :bprevious<cr>
-
-"nmap <leader>c :bd<cr>
 "Quickly edit/reload the vimrc file
 nmap <silent> <leader>e :e $MYVIMRC<CR>
-nmap <silent> <leader>r :so $MYVIMRC<CR>
+nmap <silent> <leader>s :so $MYVIMRC<CR>
+
 " Change Working Directory to that of the current file
 cmap cd. cd %:p:h
 
@@ -251,70 +178,26 @@ cmap f!! setlocal foldmethod=indent
 
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
+
 " space open/closes folds
 nnoremap <space> za
 
-" Easy bindings for its various modes
-nmap <leader>bg :call ToggleTheme()<CR>
-
-" Vim
-let g:indentLine_color_term = 239
-"GVim
-let g:indentLine_color_gui = '#08434c'
-" none X terminal
-let g:indentLine_color_tty_light = 4 " (default: 4)
-let g:indentLine_color_dark = 2 " (default: 2)
-let g:indentLine_char = '┆'
-
-" vim-airline
-let g:airline_extensions = ['branch', 'tabline']
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#branch#enabled=1
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-      let g:airline_symbols = {}
-endif
-let g:airline_symbols.space = "\ua0"
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
-let g:airline#extensions#tabline#right_sep = ''
-let g:airline#extensions#tabline#right_alt_sep = ''
-
-"pymode to use python3
-"let g:pymode_python = 'python3'
-"let g:pymode_rope=0
-"let g:pymode_rope_completion = 0
-"let g:pymode_rope_complete_on_dot = 0
-"let g:pymode_rope_lookup_project = 0
-
-"let g:syntastic_python_checkers = ['flake8']
-
-map <Leader> <Plug>(easymotion-prefix)
-map  <Leader>/ <Plug>(easymotion-sn)
-omap <Leader>/ <Plug>(easymotion-tn)
-"vnoremap <C-c> "*y
-
-" Move to next/previous errors
-nmap <silent> <leader>k <Plug>(ale_previous_wrap)
-nmap <silent> <leader>j <Plug>(ale_next_wrap)
+" Indent
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_enable_on_vim_startup = 1
 
 " Cd to open file directory
 nnoremap ,cd :cd %:p:h<CR>
 
-" folding
-"set foldmethod=syntax
-set foldcolumn=1
-
 " js
-let g:ale_linters = { 
+let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'scss': ['scss-lint'],
+\   'scss': ['scsslint'],
 \}
+
+let g:ale_javascript_eslint_executable = 'eslint_d'
 let g:jsx_ext_required = 0
 
 " Change error symbols
@@ -331,46 +214,83 @@ let g:ale_lint_on_save = 0
 let g:ale_lint_on_text_changed = 1
 let g:ale_lint_delay = 300 " ms
 
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_auto_colors = 0
-let g:indent_guides_enable_on_vim_startup = 1
+" Move to next/previous errors
+nmap <silent> <leader>k <Plug>(ale_previous_wrap)
+nmap <silent> <leader>j <Plug>(ale_next_wrap)
 
 "NerdTree ignore
 let NERDTreeIgnore = ['\.pyc$']
-
-"python with virtualenv support
-python3 << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-    project_base_dir = os.environ['VIRTUAL_ENV']
-    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-    exec(open(activate_this).read(), dict(__file__=activate_this))
-EOF
-
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-
-" Default mapping multi cursor
-let g:multi_cursor_next_key='<C-n>'
-let g:multi_cursor_prev_key='<C-p>'
-let g:multi_cursor_skip_key='<C-x>'
-let g:multi_cursor_quit_key='<Esc>'
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+nmap <leader>n :NERDTreeFind <CR>
+noremap <tab> :NERDTreeToggle <CR>
 
 " :InstantMarkdownPreview
 let g:instant_markdown_autostart = 0
 
-let g:ale_javascript_eslint_executable = 'eslint_d'
-
-
 let g:esearch = {
-  \ 'adapter':    'ag',
+  \ 'adapter':    'rg',
   \ 'backend':    'system',
   \ 'out':        'qflist',
   \ 'batch_size': 1000,
-  \ 'use':        ['word_under_cursor', 'hlsearch', 'last'],
+  \ 'use':        ['visual', 'word_under_cursor', 'hlsearch', 'last'],
   \}
 
 let esearch#cmdline#help_prompt = 0
+
+let g:lightline = {
+      \ 'colorscheme': 'seoul256',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
+
+" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FOR GIT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+" Put this in your .vimrc and whenever you `git commit` you'll see the diff of your commit next to your commit message.
+" For the most accurate diffs, use `git config --global commit.verbose true`
+" BufRead seems more appropriate here but for some reason the final `wincmd p` doesn't work if we do that.
+autocmd VimEnter COMMIT_EDITMSG call OpenCommitMessageDiff()
+function! OpenCommitMessageDiff()
+  " Save the contents of the z register
+  let old_z = getreg("z")
+  let old_z_type = getregtype("z")
+  try
+    call cursor(1, 0)
+    let diff_start = search("^diff --git")
+    if diff_start == 0
+      " There's no diff in the commit message; generate our own.
+      let @z = system("git diff --cached -M -C")
+    else
+      " Yank diff from the bottom of the commit message into the z register
+      :.,$yank z
+      call cursor(1, 0)
+    endif
+    " Paste into a new buffer
+    vnew
+    normal! V"zP
+  finally
+    " Restore the z register
+    call setreg("z", old_z, old_z_type)
+  endtry
+  " Configure the buffer
+  set filetype=diff noswapfile nomodified readonly
+  silent file [Changes\ to\ be\ committed]
+  " Get back to the commit message
+  wincmd p
+endfunction
+"Credit joshdick
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif

@@ -6,11 +6,12 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 # default variables
-set $wallpaper  ~/Pictures/wallpaper/heroku-x-python-wallpaper-screen-3840×2160.png
+set $wallpaper  ~/Pictures/wallpaper/selected/wallpapersden.com_batman-monochrome-artwork_2560x1600.jpg
 
 set $musicplayer rhythmbox
 set $filemanager thunar
-set $terminal    termite
+set $terminal    termite # alacritty
+set $terminal2   alacritty
 set $editor      gvim
 set $browser     firefox
 set $lockscreen  "$HOME/Pictures/lock-flat.png"
@@ -35,6 +36,8 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec $terminal
+bindsym $mod+Shift+Return exec $terminal2
+
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -222,6 +225,9 @@ bar {
         status_command i3blocks
         i3bar_command i3bar -t
         strip_workspace_numbers yes
+        tray_output DP-1
+        #tray_output DP-2
+        #tray_output HDMI-1
         tray_output eDP-1
         tray_padding 1
         position top
@@ -284,20 +290,20 @@ bindsym $mod+minus scratchpad show
 
 # ** Pulse Audio Controls **
 # increase sound volume
-bindsym XF86AudioRaiseVolume exec --no-startup-id $myconfigPath/script/volume.py up 5 && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume UP [$($myconfigPath/script/volume.py read)%] && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
+bindsym XF86AudioRaiseVolume exec --no-startup-id $myconfigPath/script/volume.py up 5  && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # decrease sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id $myconfigPath/script/volume.py down 5 && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume Down [$($myconfigPath/script/volume.py read)%] && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
+bindsym XF86AudioLowerVolume exec --no-startup-id $myconfigPath/script/volume.py down 5 && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # toggle mute
-bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle && notify-send.sh -R /tmp/volume-notify -u low -t 1 -a volume -i audio-volume-high Volume $(amixer -D pulse get Master | awk '{if(NR==6){ print $6}}')
+bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
 # increase brightness 255max
-bindsym XF86MonBrightnessUp exec --no-startup-id   /usr/local/bin/brightnessCon + && notify-send.sh -R /tmp/brightness-notify -u low -t 1 -i sunny Brightness $(brightnessCon | awk '{if(NR==2){print $2}}')
+bindsym XF86MonBrightnessUp exec --no-startup-id /usr/local/bin/brightnessCon +
 # decrease brightness
-bindsym XF86MonBrightnessDown exec --no-startup-id /usr/local/bin/brightnessCon - && notify-send.sh -R /tmp/brightness-notify -u low -t 1 -i sunny Brightness $(brightnessCon | awk '{if(NR==2){print $2}}')
+bindsym XF86MonBrightnessDown exec --no-startup-id /usr/local/bin/brightnessCon -
 # decrease brightness
 # ** Playerctl Audio Controls **
-bindsym XF86AudioPlay exec  playerctl play-pause && notify-send.sh -R /tmp/play-notify -u low -t 1 -i music Play/Pause $(playerctl status)
-bindsym XF86AudioPrev exec  playerctl previous
-bindsym XF86AudioNext exec  playerctl next
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause && dunstify -p -r "${$(cat /tmp/play-notify):-0}" -u low -i music Play/Pause $(playerctl status) > /tmp/play-notify
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioNext exec --no-startup-id playerctl next
 
 # previous workspace
 bindsym $mod+Ctrl+h workspace prev
@@ -321,7 +327,7 @@ bindsym $mod+Ctrl+w exec --no-startup-id /usr/bin/$browser
 bindsym $mod+Ctrl+f exec --no-startup-id $filemanager
 
 # $filemanager shortcut
-bindsym $mod+Shift+w exec --no-startup-id feh --randomize --bg-fill ~/Pictures/wallpaper/*
+bindsym $mod+Shift+w exec --no-startup-id feh --randomize --bg-fill ~/Pictures/wallpaper/selected/*
 
 # vlc shortcut
 bindsym $mod+Ctrl+v exec --no-startup-id vlc
@@ -356,8 +362,8 @@ exec --no-startup-id gnome-settings-daemon
 
 # workspace 4
 #exec --no-startup-id i3-msg 'workspace $workspace1; exec /opt/viber/Viber'
-exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/skypeforlinux'
-exec --no-startup-id i3-msg 'workspace $workspace4; exec /usr/bin/slack'
+#exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/skypeforlinux'
+#exec --no-startup-id i3-msg 'workspace $workspace4; exec /usr/bin/slack'
 #exec --no-startup-id i3-msg 'workspace $workspace4; exec /opt/trello/Trello'
 
 # workspace 3,4 - terminal
@@ -366,12 +372,13 @@ exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
 # workspace 5 - tudu
 #exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e tudu'
 exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e "vim $HOME/git/todo.md"'
+#exec --no-startup-id i3-msg 'workspace $workspace10; exec $terminal -e "vim $HOME/git/myconfig/i3/i3/config-template"'
 # workspace 9 - $filemanager
 #exec --no-startup-id i3-msg 'workspace $workspace9; exec $filemanager'
 
 # workspace 8 -music
 #exec $musicplayer
-exec --no-startup-id pactl load-module module-bluetooth-discover                                                                  <<<
+exec --no-startup-id pactl load-module module-bluetooth-discover
 
 # -------- move application to workspace --------  use xprop in terminal
 

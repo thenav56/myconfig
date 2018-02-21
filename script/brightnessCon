@@ -2,6 +2,7 @@
 
 maxfile="/sys/class/backlight/intel_backlight/max_brightness"
 file="/sys/class/backlight/intel_backlight/brightness"
+NOTIFY_ID_FILE="/tmp/brightness-notify"
 
 maxvalue=$(cat "$maxfile")
 value=$(cat "$file")
@@ -49,3 +50,6 @@ if (( $var1 > $maxvalue )) || (( $var1 < $minvalue )) ; then
 fi
     echo $var1
     echo $var1 > "$file"
+    NOTIFY_ID=$(cat $NOTIFY_ID_FILE)
+    PERCENTAGE=$(($value*100/$maxvalue))"%"
+    dunstify -p -r ${NOTIFY_ID:=0} -u low -a volume -i sunny Brightness $PERCENTAGE > $NOTIFY_ID_FILE

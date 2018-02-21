@@ -30,7 +30,7 @@
     dmenu = /usr/bin/dmenu -p dunst:
     browser = /usr/bin/firefox -new-tab
     icon_position = right
-    max_icon_size = 8
+    max_icon_size = 30
     icon_folders = /home/navin/git/myconfig/icons:/usr/share/icons/Paper/16x16/mimetypes/:/usr/share/icons/Paper/48x48/status/:/usr/share/icons/Paper/16x16/devices/:/usr/share/icons/Paper/48x48/notifications/:/usr/share/icons/Paper/48x48/emblems/
 
 [frame]

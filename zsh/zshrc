@@ -51,14 +51,17 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode docker zsh-autosuggestions zsh_reload django fancy-ctrl-z)
+plugins=(
+    git vi-mode yarn docker docker-compose zsh-autosuggestions zsh_reload
+    django fancy-ctrl-z zsh-syntax-highlighting vi-mode
+)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
 # Use vim keybindings
-bindkey -v
+# bindkey -v
 
 # History Configuration
 HISTSIZE=10000000
@@ -80,6 +83,7 @@ alias tmux="TERM=screen-256color-bce tmux"
 
 export PATH=${PATH}:${HOME}/.config/composer/vendor/bin/
 export PATH=${PATH}:${HOME}/.local/bin/
+export PATH="$HOME/.cargo/bin:$PATH"
 export EDITOR=vim
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -101,6 +105,8 @@ bindkey '^ ' autosuggest-accept
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
+alias ssh='TERM=screen ssh'
+#alias ls='colorls'
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -124,6 +130,16 @@ _has() {
 function venvactive()
 {
     $(envactive)
+}
+
+function dark() {
+    ~/git/myconfig/alacritty/dark.sh
+    ~/git/myconfig/termite/termite-dark.sh
+}
+
+function light() {
+    ~/git/myconfig/alacritty/light.sh
+    ~/git/myconfig/termite/termite-light.sh
 }
 
 function screensaver()
@@ -156,8 +172,10 @@ if [[ $TERM == xterm-termite ]]; then
 fi
 
 # fzf + ag configuration
-if _has fzf && _has ag; then
-  export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
+if _has fzf && _has rg; then
+  export FZF_DEFAULT_IGNORE_FOLDERS='"!{.git,node_modules,coverage,.cache,*vim/plugged,*vim/tmp}/*"'
+  export FZF_DEFAULT_IGNORE_FILES='"!*{.pyc}"'
+  export FZF_DEFAULT_COMMAND="rg -i --files --no-ignore --follow --hidden -g $FZF_DEFAULT_IGNORE_FILES -g $FZF_DEFAULT_IGNORE_FOLDERS 2> /dev/null"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_DEFAULT_OPTS='
