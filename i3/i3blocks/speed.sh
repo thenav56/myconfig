@@ -70,4 +70,6 @@ if [ $( bc <<< "scale = 2; $upsd" ) == "0"  ] && [ $( bc <<< "scale = 2; $dnsd" 
     fi
 fi
 
+# echo "<span color='$colordD'>" $( bc <<< "scale = 2; $dnsd" ) "$dmag</span>"  "<span color='$colordU'>" $( bc <<< "scale = 2; $upsd" ) "$umag</span>"
+# echo "<span color='$colordD'>" $( bc <<< "scale = 2; $dnsd" ) "$dmag</span>"  "<span color='$colordU'>" $( bc <<< "scale = 2; $upsd" ) "$umag</span>"
 echo "<span color='$colordD'>" $( bc <<< "scale = 2; $dnsd" ) "$dmag</span>"  "<span color='$colordU'>" $( bc <<< "scale = 2; $upsd" ) "$umag</span>"

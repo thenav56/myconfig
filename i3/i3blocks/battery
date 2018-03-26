@@ -60,11 +60,9 @@ if ( $status ne $prevStatus ){
     }
 }
 
-if ($status eq 'Discharging') {
-	
-} elsif ($status eq 'Charging') {
+if ($status eq 'Charging') {
 	$full_text .= ' ';
-}else{
+} elsif ($status eq 'Full') {
 	$full_text .= ' ';
 }
 
@@ -91,17 +89,15 @@ if ($percent < 20) {
             close(Time);
         }
     }
-}elsif ($percent < 40) {
-    $full_text .= ' ';
 }elsif ($percent < 60) {
     $full_text .= ' ';
 }elsif ($percent < 90) {
     $full_text .= " ";
-}else{ 
+}else{
     $full_text .= ' ';
 }
 
-if ($percent < 100) { 
+if ($percent < 100) {
 $full_text .= "$percent%";
 }
 $short_text .= $full_text;

@@ -6,13 +6,13 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 # default variables
-set $wallpaper  ~/Pictures/wallpaper/selected/wallpapersden.com_batman-monochrome-artwork_2560x1600.jpg
+set $wallpaper  ~/Pictures/wallpaper/selected/NwBJ7Yg.jpg
 
 set $musicplayer rhythmbox
 set $filemanager thunar
 set $terminal    termite # alacritty
 set $terminal2   alacritty
-set $editor      gvim
+set $editor      vim
 set $browser     firefox
 set $lockscreen  "$HOME/Pictures/lock-flat.png"
 set $myconfigPath $HOME/git/myconfig
@@ -112,9 +112,10 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # toggle wifi (xps 15 wifi adapter sleeps to much)
-#bindsym $mod+t exec rfkill block wifi && rfkill unblock wifi
-#bindsym $mod+t exec nmcli connection up toggle
-bindsym $mod+t exec nmcli device disconnect wlp2s0 && nmcli device connect wlp2s0
+# bindsym $mod+t exec nmcli device disconnect wlp2s0 && nmcli device connect wlp2s0
+bindsym $mod+t exec sudo netctl restart $(netctl list | grep '*' | awk '{ print $2 }')
+
+# sync audio with bluetooth device
 bindsym $mod+b exec bt-sync
 
 bindsym $mod+c exec $myconfigPath/script/toggleCompton.sh
@@ -124,11 +125,11 @@ set $workspace1 "1: "
 set $workspace2 "2: "
 set $workspace3 "3: "
 set $workspace4 "4: "
-set $workspace5 "5: "
+set $workspace5 "5: "
 set $workspace6 "6: "
 set $workspace7 "7: "
 set $workspace8 "8: "
-set $workspace9 "9: "
+set $workspace9 "9: "
 set $workspace10 "10:"
 
 # switch to workspace
@@ -225,10 +226,7 @@ bar {
         status_command i3blocks
         i3bar_command i3bar -t
         strip_workspace_numbers yes
-        tray_output DP-1
-        #tray_output DP-2
-        #tray_output HDMI-1
-        tray_output eDP-1
+        # tray_output eDP-1
         tray_padding 1
         position top
         #font xft: FontAwesome , Ubuntu,  pango 11
@@ -294,11 +292,11 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id $myconfigPath/script/volume.py
 # decrease sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id $myconfigPath/script/volume.py down 5 && paplay "$HOME/.notify/Soothing-Alerts/WAV/High Boom.wav"
 # toggle mute
-bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
+bindsym XF86AudioMute exec --no-startup-id $myconfigPath/script/volume.py toggle
 # increase brightness 255max
-bindsym XF86MonBrightnessUp exec --no-startup-id /usr/local/bin/brightnessCon +
+bindsym XF86MonBrightnessUp exec --no-startup-id $myconfigPath/script/brightnessCon +
 # decrease brightness
-bindsym XF86MonBrightnessDown exec --no-startup-id /usr/local/bin/brightnessCon -
+bindsym XF86MonBrightnessDown exec --no-startup-id $myconfigPath/script/brightnessCon -
 # decrease brightness
 # ** Playerctl Audio Controls **
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause && dunstify -p -r "${$(cat /tmp/play-notify):-0}" -u low -i music Play/Pause $(playerctl status) > /tmp/play-notify
@@ -334,6 +332,7 @@ bindsym $mod+Ctrl+v exec --no-startup-id vlc
 
 # editor shortcut
 bindsym $mod+Ctrl+e exec --no-startup-id $terminal -e $editor
+bindsym $mod+Shift+v exec $myconfigPath/editinvim.sh
 #bindsym Ctrl+Mod4+l exec xautolock -locknow
 
 # --------------------------------------------------------------
@@ -341,6 +340,8 @@ bindsym $mod+Ctrl+e exec --no-startup-id $terminal -e $editor
 # ------- Start applications in workspace during startup ----
 
 exec $myconfigPath/script/toggleCompton.sh
+exec dunst
+
 #set wallpaper
 exec_always  feh --bg-fill $wallpaper
 #exec feh --bg-fill $wallpaper
@@ -350,7 +351,7 @@ exec redshift-gtk
 #exec ~/git/mainbatti-talika/mainbatti-indicator.py
 # workspace 1 - browser
 exec /usr/bin/$browser
-exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/google-chrome'
+exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/google-chrome-stable'
 
 # Sound
 exec --no-startup-id pasystray --volume-max=150
@@ -363,7 +364,7 @@ exec --no-startup-id gnome-settings-daemon
 # workspace 4
 #exec --no-startup-id i3-msg 'workspace $workspace1; exec /opt/viber/Viber'
 #exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/skypeforlinux'
-#exec --no-startup-id i3-msg 'workspace $workspace4; exec /usr/bin/slack'
+exec --no-startup-id i3-msg 'workspace $workspace4; exec /usr/bin/slack'
 #exec --no-startup-id i3-msg 'workspace $workspace4; exec /opt/trello/Trello'
 
 # workspace 3,4 - terminal
@@ -371,7 +372,7 @@ exec --no-startup-id i3-msg 'workspace $workspace2; exec $terminal'
 #exec --no-startup-id i3-msg 'workspace $workspace3; exec $terminal -e $editor'
 # workspace 5 - tudu
 #exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e tudu'
-exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e "vim $HOME/git/todo.md"'
+exec --no-startup-id i3-msg 'workspace $workspace5; exec $terminal -e "$editor $HOME/git/todo.md"'
 #exec --no-startup-id i3-msg 'workspace $workspace10; exec $terminal -e "vim $HOME/git/myconfig/i3/i3/config-template"'
 # workspace 9 - $filemanager
 #exec --no-startup-id i3-msg 'workspace $workspace9; exec $filemanager'
@@ -387,9 +388,6 @@ assign [class="(?i)$browser"] →  $workspace1
 
 #assign [class="(?i)$terminal"]	→	$workspace2
 
-assign [class="(?i)$editor"]  → $workspace3
-
-
 assign [class="(?i)skype"] → $workspace4
 assign [class="(?i)trello"] → $workspace4
 assign [class="(?i)viber"] → $workspace4
@@ -403,13 +401,15 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [window_role="Preferences"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="scratchpad"] floating enable
 
 for_window [class="(?i)blueman"] floating enable
 for_window [class="(?i)pavucontrol"] floating enable, move position mouse
 for_window [class="(?i)arandr"] floating enable,  move down $popup-height px
 for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $popup-height px
 for_window [class="(?i)GitKraken"] floating enable
-for_window [window_role="pop-up"] floating enable
+
 
 # gaps
 for_window [class="^.*"] border pixel 0

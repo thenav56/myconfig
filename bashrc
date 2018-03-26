@@ -136,6 +136,7 @@ export HISTCONTROL=ignoreboth:erasedups
 export PATH=${PATH}:${HOME}/.config/composer/vendor/bin/
 export PATH=${PATH}:${HOME}/.local/bin/
 export EDITOR=vim
+export VISUAL="vim"
 
 # added by travis gem
 [ -f /home/navin/.travis/travis.sh ] && source /home/navin/.travis/travis.sh

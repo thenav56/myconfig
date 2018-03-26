@@ -8,7 +8,7 @@ MAX = 100
 MIN = 0
 NOTIFY_ID_FILE = '/tmp/volume-notify'
 NOFITY = 'dunstify -p {id} -u low -a volume -i '\
-         'audio-volume-high Volume \'{action} {volume}\' > {file}'
+         '{icon_name} Volume \'{action} {volume}\' > {file}'
 GET_VOLUME = 'amixer -D pulse get Master | grep -o "\[.*%\]" |'\
              ' grep -o "[0-9]*" | head -n1'
 IS_MUTED = 'amixer -D pulse get Master | grep -o "\[on\]" | head -n1'
@@ -36,6 +36,8 @@ def send_notification(action, show_volume=True):
     volume = purify_number(get_volume()) if show_volume else ''
     notify_cmd = NOFITY.format(
         file=NOTIFY_ID_FILE, volume=volume,
+        icon_name='audio-volume-low'
+        if action == 'Mute' else 'audio-volume-high',
         action=action,
         id=r_id)
     subprocess.run(notify_cmd, shell=True)

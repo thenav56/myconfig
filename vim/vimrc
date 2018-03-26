@@ -6,27 +6,34 @@ call plug#begin('~/.vim/plugged')
 " This is the Vundle package, which can be found on GitHub.
 " For GitHub epos, you specify plugins using the
 " 'user/repository' format
-Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug  'junegunn/fzf.vim'
-Plug  'tweekmonster/startuptime.vim'
-Plug  'mhinz/vim-startify'
-Plug  'suan/vim-instant-markdown'
-Plug  'felixhummel/setcolors.vim'
-Plug  'junegunn/goyo.vim'
-Plug  'sheerun/vim-polyglot'
-Plug  'eugen0329/vim-esearch'
-Plug  'Chiel92/vim-autoformat'
-Plug  'tpope/vim-commentary'
-Plug  'nathanaelkane/vim-indent-guides'
-Plug  'tpope/vim-fugitive' " git wrapper for git e.g Gdiff :P
-Plug  'airblade/vim-gitgutter' " shows git diff
-Plug  'scrooloose/nerdtree' " file explorer
-Plug  'nvie/vim-flake8'
-Plug  'Valloric/YouCompleteMe' " Shows suggestions
-Plug  'w0rp/ale' " Awesome aync linter manager
-Plug  'wakatime/vim-wakatime' " tracks hours to wakatime site
-Plug  'itchyny/lightline.vim'
-Plug  'rakr/vim-one'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tweekmonster/startuptime.vim'
+Plug 'qpkorr/vim-bufkill'
+Plug 'mhinz/vim-startify'
+Plug 'suan/vim-instant-markdown'
+Plug 'felixhummel/setcolors.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'eugen0329/vim-esearch'
+Plug 'Chiel92/vim-autoformat'
+Plug 'tpope/vim-commentary'
+Plug 'Yggdroot/indentLine'
+Plug 'tpope/vim-fugitive' " git wrapper for git e.g Gdiff :P
+Plug 'airblade/vim-gitgutter' " shows git diff
+Plug 'scrooloose/nerdtree' " file explorer
+Plug 'nvie/vim-flake8'
+" Plug 'Valloric/YouCompleteMe' " Shows suggestions
+Plug 'w0rp/ale' " Awesome aync linter manager
+Plug 'wakatime/vim-wakatime' " tracks hours to wakatime site
+Plug 'itchyny/lightline.vim'
+Plug 'joshdick/onedark.vim'
+
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
 
 call plug#end()
 
@@ -74,12 +81,11 @@ set viewoptions=folds,options,cursor,unix,slash     " Better Unix / Windows comp
 set iskeyword-=.                                    " '.' is an end of word designator
 set list                                            " Useful to see difference between tab and space
 set listchars=tab:›\ ,trail:•,extends:#,nbsp:.      " Highlight problematic whitespace
-set wildmenu                                        " Command-line completion show a list of matches
-set wildmode=longest:full,full                      " Specifies how command line completion works
+set wildmode=longest,list,full
+set wildmenu
 " List of file patterns ignored while expanding wildcards
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.yardoc/*,*/js-build/*,*/node_modules/*,*.exe,*.so,*.dat,*.o,*.obj,*.pyc
 set wildignorecase                                  " Ignore case when completing file names
-set t_Co=256                                    " Set terminal color to 256
 
 set viminfo+=n~/.vim/tmp/viminfo                " Put viminfo inside .vim/tmp folder
 
@@ -99,6 +105,13 @@ set splitbelow                                      "split below
 set splitright
 "set wrapmargin=10                                  " Number of characters from right window border where wrapping starts
 
+if has('gui_running')
+    set go -=m
+    set go -=T
+endif
+" Map leader to ,
+let mapleader = ','
+
 au Filetype python call SetPython()
 function! SetPython()
     setlocal textwidth=79                                    " Set maximum width of text that is being inserted
@@ -107,36 +120,34 @@ function! SetPython()
 endfunction
 
 set termguicolors
-let colorSchemeL="one"
-let colorSchemeD="one"
-
-function! ToggleTheme()
-  let cColors = g:colors_name
-  let background = (g:thenav_current_theme == "light")? "dark" : "light"
-  exec "set background =". background
-  let tColors = (g:thenav_current_theme == "light")? g:colorSchemeD:g:colorSchemeL
-  let g:thenav_current_theme = (g:thenav_current_theme == "light")? "dark" : "light"
-  exec "color ". tColors
-  redraw
-endfunction
+set t_Co=256                                    " Set terminal color to 256
+let colorSchemeL="onehalflight"
+let colorSchemeD="PaperColor"
+let lightlineP="Dracula"
 
 " Toggle Dark/light Theme
-nmap <leader>bg :call ToggleTheme()<CR>
+nmap <leader>bg :call ToggleTheme()<cr>
+function! ToggleTheme()
+    let cColors = g:colors_name
+    let background = (g:thenav_current_theme == "light")? "dark" : "light"
+    exec "set background =". background
+    let tColors = (g:thenav_current_theme == "light")? g:colorSchemeD:g:colorSchemeL
+    let g:thenav_current_theme = (g:thenav_current_theme == "light")? "dark" : "light"
+    exec "color ". tColors
+    redraw
+endfunction
 
 " UI
 let hour = strftime("%H")
 if  ( 6 <= hour && hour < 15)
-  set background=light
-  let g:thenav_current_theme = "light"
-  exec "color ". colorSchemeL
+    set background=light
+    let g:thenav_current_theme = "light"
+    exec "color ". colorSchemeL
 else
-  set background=dark
-  let g:thenav_current_theme = "dark"
-  exec "color ". colorSchemeD
+    set background=dark
+    let g:thenav_current_theme = "dark"
+    exec "color ". colorSchemeD
 endif
-
-" Map leader to ,
-let mapleader = ','
 
 " nice navigation in splits
 nnoremap <C-J> <C-W><C-J>
@@ -151,14 +162,17 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 nmap <leader>bs :History<cr>                " Search Files History
 nmap <leader>bh :History:<cr>               " Search Command History
 nmap <leader>cc :Colors<cr>
+nmap <leader>fa :Ag!<cr>
 nmap ; :Buffers<CR>
 
 let g:fzf_action = {
-    \ 'ctrl-q': 'wall | bdelete',
-    \ 'ctrl-t': 'tab split',
-    \ 'ctrl-x': 'split',
-    \ 'ctrl-v': 'vsplit'
-\}
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-v': 'vsplit'
+            \}
+
+" Delete Buffer withouting impacting splits
+nmap <leader>q :BD<cr>
 
 " paste without overwriting the buffer
 map <leader>p c<C-R>0<Esc>
@@ -183,19 +197,17 @@ nnoremap <leader><space> :nohlsearch<CR>
 nnoremap <space> za
 
 " Indent
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_auto_colors = 0
-let g:indent_guides_enable_on_vim_startup = 1
+let g:indentLine_setColors = 0
+let g:indentLine_char = '┆'
 
 " Cd to open file directory
 nnoremap ,cd :cd %:p:h<CR>
 
 " js
 let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'scss': ['scsslint'],
-\}
+            \   'javascript': ['eslint'],
+            \   'scss': ['scsslint'],
+            \}
 
 let g:ale_javascript_eslint_executable = 'eslint_d'
 let g:jsx_ext_required = 0
@@ -229,25 +241,128 @@ noremap <tab> :NERDTreeToggle <CR>
 let g:instant_markdown_autostart = 0
 
 let g:esearch = {
-  \ 'adapter':    'rg',
-  \ 'backend':    'system',
-  \ 'out':        'qflist',
-  \ 'batch_size': 1000,
-  \ 'use':        ['visual', 'word_under_cursor', 'hlsearch', 'last'],
-  \}
+ \            'adapter':    'rg',
+ \            'backend':    'system',
+ \            'out':        'qflist',
+ \            'batch_size': 1000,
+ \            'use':        ['visual', 'word_under_cursor', 'hlsearch', 'last'],
+ \           }
 
 let esearch#cmdline#help_prompt = 0
 
 let g:lightline = {
-      \ 'colorscheme': 'seoul256',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
-      \ },
-      \ }
+ \            'colorscheme': g:lightlineP,
+ \            'inactive': {
+ \              'left': [ [], [ 'readonly', 'filename', 'modified' ] ],
+ \              'right': [ ['lineinfo'], ['percent'] ],
+ \            },
+ \            'active': {
+ \              'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+ \              'right': [ ['lineinfo'], ['percent'],
+ \                         [ 'filetype'],
+ \                         [ 'linter_warnings', 'linter_errors' ]]
+ \            },
+ \            'component_function': {
+ \              'gitbranch': 'LightlineGitBranch',
+ \              'filename': 'LightlineFilename',
+ \              'modified': 'LightlineModified',
+ \            },
+ \            'component_expand': {
+ \              'readonly': 'LightlineReadOnly',
+ \              'linter_warnings': 'LightlineLinterWarnings',
+ \              'linter_errors': 'LightlineLinterErrors',
+ \            },
+ \            'component_type': {
+ \              'readonly': 'error',
+ \              'linter_warnings': 'warning',
+ \              'linter_errors': 'error',
+ \            },
+ \            }
+
+autocmd User ALELint call lightline#update()
+
+function! LightlineReadOnly()
+    return &readonly ? '' : ''
+endfunction
+
+function! LightlineGitBranch()
+    return fugitive#head() !=# '' ? ' ' . fugitive#head()  : ''
+endfunction
+
+function! LightlineFilename()
+    return expand('%:') !=# '' ? GetShortPath() . expand('%:t') : '[No Name]'
+endfunction
+
+function! LightlineModified()
+    return &modified ? '[+]' : ''
+endfunction
+
+function! LightlineLinterWarnings() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? '' : printf('%d ', all_non_errors)
+endfunction
+
+function! LightlineLinterErrors() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? '' : printf('%d ✗', all_errors)
+endfunction
+
+function! GetShortPath()
+    let s:is_win = has('win32') || has('win64')
+    let short = fnamemodify(expand('%:h'), ':~:.')
+    if !has('win32unix')
+        let short = pathshorten(short)
+    endif
+    let slash = (s:is_win && !&shellslash) ? '\' : '/'
+    return empty(short) ? '~'.slash : short . (short =~ escape(slash, '\').'$' ? '' : slash)
+endfunction
+
+" Update and show lightline but only if it's visible (e.g., not in Goyo)
+function! s:MaybeUpdateLightline()
+    if exists('#lightline')
+        call lightline#update()
+    end
+endfunction
+
+" LSP
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+        \ 'whitelist': ['typescript'],
+        \ })
+endif
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+let g:lsp_async_completion = 1
+autocmd FileType typescript setlocal omnifunc=lsp#complete
+
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_remove_duplicates = 1
+
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'whitelist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+
+imap <c-space> <Plug>(asyncomplete_force_refresh)
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
 " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FOR GIT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 " Put this in your .vimrc and whenever you `git commit` you'll see the diff of your commit next to your commit message.
@@ -255,42 +370,42 @@ let g:lightline = {
 " BufRead seems more appropriate here but for some reason the final `wincmd p` doesn't work if we do that.
 autocmd VimEnter COMMIT_EDITMSG call OpenCommitMessageDiff()
 function! OpenCommitMessageDiff()
-  " Save the contents of the z register
-  let old_z = getreg("z")
-  let old_z_type = getregtype("z")
-  try
-    call cursor(1, 0)
-    let diff_start = search("^diff --git")
-    if diff_start == 0
-      " There's no diff in the commit message; generate our own.
-      let @z = system("git diff --cached -M -C")
-    else
-      " Yank diff from the bottom of the commit message into the z register
-      :.,$yank z
-      call cursor(1, 0)
-    endif
-    " Paste into a new buffer
-    vnew
-    normal! V"zP
-  finally
-    " Restore the z register
-    call setreg("z", old_z, old_z_type)
-  endtry
-  " Configure the buffer
-  set filetype=diff noswapfile nomodified readonly
-  silent file [Changes\ to\ be\ committed]
-  " Get back to the commit message
-  wincmd p
+    " Save the contents of the z register
+    let old_z = getreg("z")
+    let old_z_type = getregtype("z")
+    try
+        call cursor(1, 0)
+        let diff_start = search("^diff --git")
+        if diff_start == 0
+            " There's no diff in the commit message; generate our own.
+            let @z = system("git diff --cached -M -C")
+        else
+            " Yank diff from the bottom of the commit message into the z register
+            :.,$yank z
+            call cursor(1, 0)
+        endif
+        " Paste into a new buffer
+        vnew
+        normal! V"zP
+    finally
+        " Restore the z register
+        call setreg("z", old_z, old_z_type)
+    endtry
+    " Configure the buffer
+    set filetype=diff noswapfile nomodified readonly
+    silent file [Changes\ to\ be\ committed]
+    " Get back to the commit message
+    wincmd p
 endfunction
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
 "(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
 if (empty($TMUX))
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    set termguicolors
-  endif
+    "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+    "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+    " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+    if (has("termguicolors"))
+        set termguicolors
+    endif
 endif

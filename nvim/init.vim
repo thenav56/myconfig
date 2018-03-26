@@ -201,7 +201,7 @@ let g:indentLine_color_tty_light = 4 " (default: 4)
 let g:indentLine_color_dark = 2 " (default: 2)
 let g:indentLine_char = '┆'
 
-" vim-airline 
+" vim-airline
 let g:airline_theme = 'PaperColor'
 let g:airline#extensions#tabline#enabled = 1 
 let g:airline#extensions#tabline#fnamemod = ':t'
@@ -225,7 +225,6 @@ map <Leader> <Plug>(easymotion-prefix)
 map  <Leader>/ <Plug>(easymotion-sn)
 omap <Leader>/ <Plug>(easymotion-tn)
 vnoremap <C-c> "*y
-
 
 " Exit in Terminal mode
 :tnoremap <C-l> <C-\><C-n>

@@ -26,7 +26,7 @@ if [ $1 == '+' ] || [ $1 == '-' ] ; then
         var1=50
     fi
     if [ $value -gt 9 ]; then
-        var1=$(($var1 + $value)) 
+        var1=$(($var1 + $value))
     fi
 fi
 
@@ -45,11 +45,12 @@ if (( $var1 > $maxvalue )) || (( $var1 < $minvalue )) ; then
             var1=$minvalue
         fi
         echo "Set Value: " $var1
-        echo $var1 > "$file"
+        echo
+        echo $var1 | sudo tee $file
         exit
 fi
     echo $var1
-    echo $var1 > "$file"
+    echo $var1 | sudo tee $file
     NOTIFY_ID=$(cat $NOTIFY_ID_FILE)
     PERCENTAGE=$(($value*100/$maxvalue))"%"
     dunstify -p -r ${NOTIFY_ID:=0} -u low -a volume -i sunny Brightness $PERCENTAGE > $NOTIFY_ID_FILE

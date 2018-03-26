@@ -1,11 +1,9 @@
 #!/bin/bash
 
-$HOME/git/myconfig/script/volume.py read
+case $BLOCK_BUTTON in
+    [1-2]) $HOME/git/myconfig/script/volume.py toggle >> /dev/null;;   # toggle mute
+    4) $HOME/git/myconfig/script/volume.py up 10 ;;  # volume up
+    5) $HOME/git/myconfig/script/volume.py down 10 ;;  # volume down
+esac
 
-if  [ "${BLOCK_BUTTON}" == "1" ] || [ "${BLOCK_BUTTON}" == "3" ]; then
-    $HOME/git/myconfig/script/volume.py toggle
-elif [ "${BLOCK_BUTTON}" == "4" ]; then
-    $HOME/git/myconfig/script/volume.py up 10
-elif [ "${BLOCK_BUTTON}" == "5" ]; then
-    $HOME/git/myconfig/script/volume.py down 10
-fi
+$HOME/git/myconfig/script/volume.py read

@@ -1,4 +1,3 @@
-
 [global]
     font = Myriad Pro 11
     format = "<b>%s</b>\n%b"
@@ -14,7 +13,7 @@
     stack_duplicates = yes
     hide_duplicates_count = yes
     geometry = "350x50-15+49"
-    transparency = 5
+    transparency = 10
     idle_threshold = 120
     monitor = 0
     follow = keyboard

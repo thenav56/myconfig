@@ -1,4 +1,5 @@
 fading = true;
+backend = "glx";
 vsync = "opengl";
 fade-delta = 5;
 fade-in-step = 0.03;

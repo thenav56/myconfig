@@ -31,7 +31,7 @@ markup=pango
 interval=2
 
 [wireless]
-label=
+label=
 instance=wlp2s0
 command=$HOME/.config/i3blocks/network
 interval=2
@@ -44,7 +44,7 @@ interval=2
 #interval=10
 
 [user]
-label= 
+label=
 command=whoami
 interval=10000
 
@@ -58,27 +58,25 @@ label=
 command=$HOME/.config/i3blocks/disk-system
 interval=30
 
-[cpu]
-label=
-command=/usr/share/i3blocks/cpu_usage
-interval=10
-
 [memory]
 label=
 command=echo $(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
 interval=10
 
+[cpu]
+label=
+command=$HOME/.config/i3blocks/cpu_usage
+interval=10
+
 [cpu_temp]
-label=
-command=/usr/share/i3blocks/temperature
+label=
+command=$HOME/.config/i3blocks/temperature
 #command=echo $(acpi -t | awk '{print $4"°C"}')
 interval=5
 
 [battery]
 command=$HOME/.config/i3blocks/battery
-#command=/usr/share/i3blocks/battery
 interval=3
-#label= 
 
 [date]
 command=echo "`date +'%G %m %d (%b %a)'`"
